@@ -1,0 +1,19 @@
+mat-card {
+    display: table;
+    margin: auto;
+    width: 600px;
+}
+
+mat-form-field {
+    display: block;
+}
+
+mat-form-field.noblock {
+    display: inline-block;
+    width: 120px;
+}
+
+button {
+    display: table;
+    margin: auto;
+}

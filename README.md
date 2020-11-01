@@ -1,27 +1,28 @@
-# MeanDaytrack
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.1.3.
+# DayTrack
 
-## Development server
+### Purpose
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+DayTrack is a tool allowing users to keep track of the books, comics, movies, series and games they have read, watched or played.
 
-## Code scaffolding
+The following information can be saved :
+  - Title
+  - Author / Director
+  - Creation year
+  - Actors (movies and series only)
+  - Summary
+  - Image
+  - Console (games only)
+  - Volume (comics only)
+  - Season (series only)
+  - Watched/read/played date
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+### Setup
+-----
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+DayTrack is a web application using the MEAN stack (frontend in Angular, backend in Node.js using the Express framework and a MongoDB database).
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+To run it locally :
+ - npm install
+ - ng serve -o --port 3311   (any available port is fine)

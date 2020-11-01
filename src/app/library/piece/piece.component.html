@@ -1,0 +1,23 @@
+<p></p>
+<mat-expansion-panel hideToggle #panel>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            <img class="piece-type-icon" src="{{ getIcon() }}" alt="Not found" />
+            <span>{{piece.title}}</span>
+        </mat-panel-title>
+        <mat-panel-description>
+            <span *ngIf="isType('Book')">{{piece.author}} </span>
+            <span *ngIf="isType('Movie')">{{piece.director}} </span>
+            <span *ngIf="isType('Game')">{{piece.console}} </span>
+            <span *ngIf="piece.year !=''">({{piece.year}})</span>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div>
+        <!-- <img class="piece-image" src="../../../assets/images/harry_potter_1.jpg" alt="Not found" /> -->
+        <img *ngIf="piece.imageUrl != ''" class="piece-image" src="{{piece.imageUrl}}" alt="Not found" />
+        <p>
+            <i>{{piece.genre}}</i>
+        </p>
+        <p>{{piece.summary}}</p>
+    </div>
+</mat-expansion-panel>

@@ -1,0 +1,28 @@
+mat-spinner {
+    /* center the spinner */
+    margin: auto;
+}
+
+mat-card {
+    display: table;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.errorMessage {
+    background-color: #fdd;
+    border: #a00 1px solid;
+    color: #a00;
+    min-width: 500px;
+}
+
+mat-form-field {
+    width: 400px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+button {
+    display: table;
+    margin: auto;
+}

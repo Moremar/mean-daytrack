@@ -1,0 +1,30 @@
+img.piece-type-icon {
+    height: 20px;
+    margin-right: 10px;
+    vertical-align: top;
+}
+
+img.piece-image {
+    display: block;
+    float: left;
+    height: 120px;
+    margin-right: 10px;
+    border: 1px solid #555;
+}
+
+mat-panel-title {
+    display: inline;
+    flex-grow: unset;
+}
+
+mat-panel-title span {
+    vertical-align: top;
+}
+
+mat-panel-description {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+mat-panel-description span {
+    margin-right: 5px;
+}

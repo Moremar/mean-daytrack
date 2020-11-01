@@ -1,0 +1,72 @@
+<mat-card>
+    <form (submit)="onSubmit(newItemForm)" #newItemForm="ngForm">
+        <!-- Item type -->
+        <mat-form-field class="noblock">
+            <mat-label>Item type</mat-label>
+            <mat-select [(ngModel)]="itemType" name="type">
+                <mat-option *ngFor="let type of itemTypes" value="{{type}}">{{ type }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <!-- Title -->
+        <mat-form-field>
+            <mat-label>Title</mat-label>
+            <input type="text" matInput name="title" ngModel #title="ngModel" required />
+            <mat-error *ngIf="title.invalid">A title is required.</mat-error>
+        </mat-form-field>
+        <!-- Genre -->
+        <mat-form-field>
+            <mat-label>Genre</mat-label>
+            <input type="text" matInput name="genre" ngModel #genre="ngModel" />
+        </mat-form-field>
+        <!-- Author -->
+        <mat-form-field *ngIf="itemType === 'Book' || itemType === 'Comic'">
+            <mat-label>Author</mat-label>
+            <input type="text" matInput name="author" ngModel #author="ngModel" />
+        </mat-form-field>
+        <!-- Actors -->
+        <mat-form-field *ngIf="itemType === 'Movie' || itemType === 'Series'">
+            <mat-label>Actors</mat-label>
+            <input type="text" matInput name="actors" ngModel #actors="ngModel" />
+        </mat-form-field>
+        <!-- Year -->
+        <div>
+            <mat-form-field class="noblock">
+                <mat-label>Created in</mat-label>
+                <input type="number" matInput name="createdIn" ngModel #createdIn="ngModel" />
+            </mat-form-field>
+        </div>
+        <!-- Console -->
+        <div>
+            <mat-form-field *ngIf="itemType === 'Game'">
+                <mat-label>Console</mat-label>
+                <input type="text" matInput name="console" ngModel #console="ngModel" />
+            </mat-form-field>
+        </div>
+        <!-- Summary -->
+        <div>
+            <mat-form-field>
+                <mat-label>Summary</mat-label>
+                <textarea cdkTextareaAutosize type="text" matInput name="summary" ngModel #summary="ngModel"></textarea>
+            </mat-form-field>
+        </div>
+        <!-- Image URL -->
+        <div>
+            <mat-form-field>
+                <mat-label>Image URL</mat-label>
+                <textarea cdkTextareaAutosize type="text" matInput name="imageUrl" ngModel #summary="ngModel"></textarea>
+            </mat-form-field>
+        </div>
+        <!-- Completed on -->
+        <div>
+            <mat-form-field class="noblock">
+                <mat-label>{{ itemType === 'Game' ? 'Completed on' : 'Read on' }}</mat-label>
+                <input matInput [matDatepicker]="picker" name="completionDate" [(ngModel)]="today" #completionDate="ngModel">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div>
+            <button mat-flat-button color="primary" type="submit">Create</button>
+        </div>
+    </form>
+</mat-card>

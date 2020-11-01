@@ -1,0 +1,22 @@
+.logo {
+    display: inline-block;
+    padding: 10px;
+    width: 180px;
+    margin-right: 20px;
+    /* custom font added in styles.css */
+    font-family: 'FreshGuava';
+    font-size: 2em;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+a.mat-button {
+    margin: 0 2px;
+}
+
+a:hover,
+a.active-link {
+    background-color: #844ee2;
+}
