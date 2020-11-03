@@ -36,4 +36,8 @@ export class PieceComponent implements OnInit {
   isType(type: string): boolean {
     return PieceType.toString(this.piece.type) === type;
   }
+
+  hasCast(): boolean {
+    return (this.isType('Series') || this.isType('Movie')) && this.piece.actors.length > 0;
+  }
 }

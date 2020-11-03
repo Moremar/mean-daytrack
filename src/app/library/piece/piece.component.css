@@ -28,3 +28,7 @@ mat-panel-description {
 mat-panel-description span {
     margin-right: 5px;
 }
+
+.spacer {
+    padding-left: 40px;
+}

@@ -19,7 +19,6 @@ The following information can be saved :
 
 
 ### Setup
------
 
 DayTrack is a web application using the MEAN stack (frontend in Angular, backend in Node.js using the Express framework and a MongoDB database).
 

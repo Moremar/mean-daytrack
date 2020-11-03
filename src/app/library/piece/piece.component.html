@@ -18,6 +18,7 @@
         <p>
             <i>{{piece.genre}}</i>
         </p>
+        <p class="cast" *ngIf="hasCast()"><i>Cast</i><span class="spacer"></span>{{piece.actors.join(', ')}}</p>
         <p>{{piece.summary}}</p>
     </div>
 </mat-expansion-panel>
