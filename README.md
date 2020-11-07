@@ -25,3 +25,5 @@ DayTrack is a web application using the MEAN stack (frontend in Angular, backend
 To run it locally :
  - npm install
  - ng serve -o --port 3311   (any available port is fine)
+ - cd backend/
+ - nodemon server.js --config ../nodemon.json (must set the DB infos first in nodemon.json)

@@ -1,0 +1,9 @@
+{
+    "env": {
+        "MONGO_ATLAS_SERVER": "cluster0.qsaef.mongodb.net",
+        "MONGO_ATLAS_PASSWORD": "cuGFQElp4SFWIoQX",
+        "MONGO_DATABASE_NAME": "mean-daytrack",
+        "JWT_ENCRYPTION_KEY": "very_long_string_JWT_uses_for_encrypting_tokens",
+        "BCRYPT_SALT": "10"
+    }
+}
