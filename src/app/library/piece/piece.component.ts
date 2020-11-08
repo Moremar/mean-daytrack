@@ -16,8 +16,6 @@ export class PieceComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('YEAR = ');
-    console.log(this.piece.year);
   }
 
 
@@ -28,7 +26,8 @@ export class PieceComponent implements OnInit {
       case PieceType.MOVIE: return '../../../assets/images/movie.svg';
       case PieceType.SERIES: return '../../../assets/images/series.svg';
       case PieceType.GAME: return '../../../assets/images/game.svg';
-      default: return 'NOT FOUND';
+      default:
+        throw Error('ERROR - No icon found for piece type ' + this.piece.type);
     }
   }
 
@@ -39,5 +38,13 @@ export class PieceComponent implements OnInit {
 
   hasCast(): boolean {
     return (this.isType('Series') || this.isType('Movie')) && this.piece.actors.length > 0;
+  }
+
+  hasVolume(): boolean {
+    return this.isType('Comic') && this.piece.volume != null;
+  }
+
+  hasSeason(): boolean {
+    return this.isType('Series') && this.piece.season != null;
   }
 }

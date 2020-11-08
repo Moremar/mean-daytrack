@@ -7,27 +7,36 @@
                 <mat-option *ngFor="let type of itemTypes" value="{{type}}">{{ type }}</mat-option>
             </mat-select>
         </mat-form-field>
+
         <!-- Title -->
         <mat-form-field>
             <mat-label>Title</mat-label>
             <input type="text" matInput name="title" ngModel #title="ngModel" required />
             <mat-error *ngIf="title.invalid">A title is required.</mat-error>
         </mat-form-field>
+
+        <!-- Volume -->
+        <div>
+            <mat-form-field *ngIf="itemType === 'Comic'" class="noblock">
+                <mat-label>Volume</mat-label>
+                <input type="number" matInput name="volume" ngModel #volume="ngModel" />
+            </mat-form-field>
+        </div>
+
+        <!-- Season -->
+        <div>
+            <mat-form-field *ngIf="itemType === 'Series'" class="noblock">
+                <mat-label>Season</mat-label>
+                <input type="number" matInput name="season" ngModel #season="ngModel" />
+            </mat-form-field>
+        </div>
+
         <!-- Genre -->
         <mat-form-field>
             <mat-label>Genre</mat-label>
             <input type="text" matInput name="genre" ngModel #genre="ngModel" />
         </mat-form-field>
-        <!-- Author -->
-        <mat-form-field *ngIf="itemType === 'Book' || itemType === 'Comic'">
-            <mat-label>Author</mat-label>
-            <input type="text" matInput name="author" ngModel #author="ngModel" />
-        </mat-form-field>
-        <!-- Actors -->
-        <mat-form-field *ngIf="itemType === 'Movie' || itemType === 'Series'">
-            <mat-label>Actors</mat-label>
-            <input type="text" matInput name="actors" ngModel #actors="ngModel" />
-        </mat-form-field>
+
         <!-- Year -->
         <div>
             <mat-form-field class="noblock">
@@ -35,13 +44,7 @@
                 <input type="number" matInput name="createdIn" ngModel #createdIn="ngModel" />
             </mat-form-field>
         </div>
-        <!-- Console -->
-        <div>
-            <mat-form-field *ngIf="itemType === 'Game'">
-                <mat-label>Console</mat-label>
-                <input type="text" matInput name="console" ngModel #console="ngModel" />
-            </mat-form-field>
-        </div>
+
         <!-- Summary -->
         <div>
             <mat-form-field>
@@ -49,6 +52,7 @@
                 <textarea cdkTextareaAutosize type="text" matInput name="summary" ngModel #summary="ngModel"></textarea>
             </mat-form-field>
         </div>
+
         <!-- Image URL -->
         <div>
             <mat-form-field>
@@ -56,6 +60,7 @@
                 <textarea cdkTextareaAutosize type="text" matInput name="imageUrl" ngModel #summary="ngModel"></textarea>
             </mat-form-field>
         </div>
+
         <!-- Completed on -->
         <div>
             <mat-form-field class="noblock">
@@ -65,6 +70,29 @@
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
         </div>
+
+        <!-- Author -->
+        <div>
+            <mat-form-field *ngIf="itemType === 'Book' || itemType === 'Comic'">
+                <mat-label>Author</mat-label>
+                <input type="text" matInput name="author" ngModel #author="ngModel" />
+            </mat-form-field>
+        </div>
+
+        <!-- Actors -->
+        <mat-form-field *ngIf="itemType === 'Movie' || itemType === 'Series'">
+            <mat-label>Actors</mat-label>
+            <input type="text" matInput name="actors" ngModel #actors="ngModel" />
+        </mat-form-field>
+
+        <!-- Console -->
+        <div>
+            <mat-form-field *ngIf="itemType === 'Game'">
+                <mat-label>Console</mat-label>
+                <input type="text" matInput name="console" ngModel #console="ngModel" />
+            </mat-form-field>
+        </div>
+
         <div>
             <button mat-flat-button color="primary" type="submit">Create</button>
         </div>

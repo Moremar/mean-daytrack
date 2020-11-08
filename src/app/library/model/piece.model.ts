@@ -1,38 +1,101 @@
 import { PieceType } from './piece-type.enum';
+import { RestPiece } from './rest-pieces.model';
 
+
+// TODO maybe create children classes for Book / Movie / Game / ...
 
 export class Piece {
 
   private constructor(
+    public id: string,
     public type: PieceType,
     public title: string,
-    public author: string,
-    public director: string,
-    public actors: string[],
-    public year: string,
+    public year: number,
     public genre: string,
-    public console: string,
     public imageUrl: string,
     public summary: string,
-    public completionDate: Date) {}
+    public completionDate: Date,
+    public author: string,         // Book and Comic only
+    public director: string,       // Movie only
+    public actors: string[],       // Movie and Series only
+    public console: string,        // Game only
+    public season: number,         // Series only
+    public volume: number,         // Comic only
+) {}
 
-  static createBook(title: string, author: string, year: string, genre: string,
-                    imageUrl: string, summary: string, completionDate: Date): Piece {
-    return new Piece(PieceType.BOOK, title, author, null, null, year, genre, null, imageUrl, summary, completionDate);
+  static createBook(
+      id: string, title: string, year: number, genre: string, imageUrl: string,
+      summary: string, completionDate: Date, author: string): Piece {
+    return new Piece(
+      id, PieceType.BOOK, title, year, genre, imageUrl, summary, completionDate,
+      author, null, null, null, null, null);
   }
 
-  static createMovie(title: string, director: string, actors: string[], year: string, genre: string,
-                     imageUrl: string, summary: string, completionDate: Date): Piece {
-    return new Piece(PieceType.MOVIE, title, null, director, actors, year, genre, null, imageUrl, summary, completionDate);
+  static createComic(
+      id: string, title: string, year: number, genre: string, imageUrl: string,
+      summary: string, completionDate: Date, author: string, volume: number): Piece {
+    return new Piece(
+      id, PieceType.COMIC, title, year, genre, imageUrl, summary, completionDate,
+      author, null, null, null, null, volume);
   }
 
-  static createGame(title: string, year: string, genre: string, console: string,
-                    imageUrl: string, summary: string, completionDate: Date): Piece {
-    return new Piece(PieceType.GAME, title, null, null, null, year, genre, console, imageUrl, summary, completionDate);
+  static createMovie(
+      id: string, title: string, year: number, genre: string, imageUrl: string,
+      summary: string, completionDate: Date, director: string, actors: string[]): Piece {
+    return new Piece(
+      id, PieceType.MOVIE, title, year, genre, imageUrl, summary, completionDate,
+      null, director, actors, null, null, null);
+  }
+
+  static createSeries(
+      id: string, title: string, year: number, genre: string, imageUrl: string,
+      summary: string, completionDate: Date, director: string, actors: string[], season: number): Piece {
+    return new Piece(
+      id, PieceType.SERIES, title, year, genre, imageUrl, summary, completionDate,
+      null, director, actors, null, season, null);
+  }
+
+  static createGame(
+      id: string, title: string, year: number, genre: string, imageUrl: string,
+      summary: string, completionDate: Date, console: string): Piece {
+    return new Piece(
+      id, PieceType.GAME, title, year, genre, imageUrl, summary, completionDate,
+      null, null, null, console, null, null);
+  }
+
+
+  static fromRestPiece(restPiece: RestPiece): Piece {
+    switch (restPiece.type) {
+      case 'Book': return Piece.createBook(
+        restPiece._id, restPiece.title, restPiece.year, restPiece.genre, restPiece.imageUrl,
+        restPiece.summary, new Date(restPiece.completionDate), restPiece.author);
+      case 'Comic': return Piece.createComic(
+        restPiece._id, restPiece.title, restPiece.year, restPiece.genre, restPiece.imageUrl,
+        restPiece.summary, new Date(restPiece.completionDate), restPiece.author, restPiece.volume);
+      case 'Movie': return Piece.createMovie(
+        restPiece._id, restPiece.title, restPiece.year, restPiece.genre, restPiece.imageUrl,
+        restPiece.summary, new Date(restPiece.completionDate), restPiece.director, restPiece.actors);
+      case 'Series': return Piece.createSeries(
+        restPiece._id, restPiece.title, restPiece.year, restPiece.genre, restPiece.imageUrl,
+        restPiece.summary, new Date(restPiece.completionDate), restPiece.director, restPiece.actors, restPiece.season);
+        case 'Game': return Piece.createGame(
+        restPiece._id, restPiece.title, restPiece.year, restPiece.genre, restPiece.imageUrl,
+        restPiece.summary, new Date(restPiece.completionDate), restPiece.console);
+      default:
+        throw Error('Piece type not supported : ' + restPiece.type);
+    }
+  }
+
+  // convert to the backend representation of the piece
+  // id is called "_id" (auto-generated by Mongoose) and the piece type enum is converted to a string
+  toRestPiece(): RestPiece {
+    return new RestPiece(
+      this.id, PieceType.toString(this.type), this.title, this.year, this.genre, this.imageUrl,
+      this.summary, this.completionDate, this.author, this.director, this.actors, this.console, this.season, this.volume);
   }
 
   pretty(): string {
-    return `${PieceType.toString(this.type)}(${this.title}, ${this.author}, ${this.director}, ${this.actors}, `
-         + `${this.year}, ${this.genre}, ${this.console}, ${this.imageUrl}, ${this.summary}, ${this.completionDate})`;
+    return `${PieceType.toString(this.type)}(${this.id}, ${this.title}, ${this.year}, ${this.genre}, ${this.imageUrl}, `
+    + `${this.summary}, ${this.completionDate}, ${this.author}, ${this.director}, ${this.actors}, ${this.console}, ${this.season}, ${this.volume})`;
   }
 }

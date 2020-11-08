@@ -111,16 +111,19 @@ exports.createPiece = (request, response, _next) => {
         // userId: request.auth.userId,
         // username: request.auth.username,
         // take piece info from the request
-        title: request.body.title,
         type: request.body.type,
+        title: request.body.title,
+        year: request.body.year,
         genre: request.body.genre,
+        imageUrl: request.body.imageUrl,
+        summary: request.body.summary,
+        completionDate: request.body.completionDate,
         author: request.body.author,
         director: request.body.director,
         actors: request.body.actors,
-        year: request.body.year,
-        imagePath: request.body.imagePath,
-        summary: request.body.summary,
-        doneDate: request.body.doneDate,
+        console: request.body.console,
+        season: request.body.season,
+        volume: request.body.volume,
     });
 
     // save in MongoDB in the "pieces" collection (lower-case plurial name of the model)
@@ -176,16 +179,19 @@ exports.editPiece = (request, response, _next) => {
             // update a piece in MongoDB
             Piece.findOneAndUpdate({ _id: pieceId }, {
                     // the user info are not editable
-                    title: request.body.title,
                     type: request.body.type,
+                    title: request.body.title,
+                    year: request.body.year,
                     genre: request.body.genre,
+                    imageUrl: request.body.imageUrl,
+                    summary: request.body.summary,
+                    completionDate: request.body.completionDate,
                     author: request.body.author,
                     director: request.body.director,
                     actors: request.body.actors,
-                    year: request.body.year,
-                    imagePath: request.body.imagePath,
-                    summary: request.body.summary,
-                    doneDate: request.body.doneDate,
+                    console: request.body.console,
+                    season: request.body.season,
+                    volume: request.body.volume,
                 }, { new: true } /* to get the updated document */ )
                 .then((updatedPiece) => {
                     console.log("GOT AFTER UPDATE :");

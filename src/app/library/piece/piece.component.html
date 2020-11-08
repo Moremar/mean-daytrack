@@ -4,12 +4,14 @@
         <mat-panel-title>
             <img class="piece-type-icon" src="{{ getIcon() }}" alt="Not found" />
             <span>{{piece.title}}</span>
+            <span *ngIf="hasVolume()"> - Vol.{{piece.volume}}</span>
+            <span *ngIf="hasSeason()"> - Season {{piece.season}}</span>
         </mat-panel-title>
         <mat-panel-description>
-            <span *ngIf="isType('Book')">{{piece.author}} </span>
-            <span *ngIf="isType('Movie')">{{piece.director}} </span>
+            <span *ngIf="isType('Book') || isType('Comic')">{{piece.author}} </span>
+            <span *ngIf="isType('Movie') || isType('Series')">{{piece.director}} </span>
             <span *ngIf="isType('Game')">{{piece.console}} </span>
-            <span *ngIf="piece.year !=''">({{piece.year}})</span>
+            <span *ngIf="piece.year != null">({{piece.year}})</span>
         </mat-panel-description>
     </mat-expansion-panel-header>
     <div>

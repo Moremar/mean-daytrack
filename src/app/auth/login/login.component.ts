@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
     // TODO call the auth service to login, subcribe to the result and
     // show the error if any or navigate to the library page
-    console.log('Logged In !');
+    console.log('Logged In with ' + loginForm.value.email + '/' + loginForm.value.password);
 
     this.loading = false;
     this.router.navigate(['library']);

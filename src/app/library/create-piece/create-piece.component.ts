@@ -6,6 +6,10 @@ import { LibraryService } from '../library.service';
 import { Piece } from '../model/piece.model';
 
 
+// TODO currently the actors are given as a comma-separated list, we could have a nicer GUI
+//      with one control per actor, and a button to add a new one
+//      That would require to switch to the ReactiveForm approach
+
 @Component({
   selector: 'app-create-piece',
   templateUrl: './create-piece.component.html',
@@ -41,24 +45,39 @@ export class CreatePieceComponent implements OnInit {
     switch (props.type) {
       case 'Book':
         newPiece = Piece.createBook(
-          props.title, props.author, props.createdIn, props.genre,
-          props.imageUrl, props.summary, props.completionDate.toDate());
+          null, props.title, props.createdIn, props.genre, props.imageUrl,
+          props.summary, props.completionDate.toDate(), props.author);
+        break;
+      case 'Comic':
+        newPiece = Piece.createComic(
+          null, props.title, props.createdIn, props.genre, props.imageUrl,
+          props.summary, props.completionDate.toDate(), props.author, props.volume);
         break;
       case 'Movie':
         newPiece = Piece.createMovie(
-          props.title, props.director, props.actors, props.createdIn, props.genre,
-          props.imageUrl, props.summary, props.completionDate.toDate());
+          null, props.title, props.createdIn, props.genre, props.imageUrl,
+          props.summary, props.completionDate.toDate(), props.director, props.actors);
         break;
-        case 'Game':
-          newPiece = Piece.createGame(
-            props.title, props.createdIn, props.genre, props.console,
-            props.imageUrl, props.summary, props.completionDate.toDate());
-          break;
-        default:
-          alert('ERROR : Unknown piece type : ' + props.type);
-          return;
+      case 'Series':
+        newPiece = Piece.createSeries(
+          null, props.title, props.createdIn, props.genre, props.imageUrl,
+          props.summary, props.completionDate.toDate(), props.director, props.actors, props.season);
+        break;
+      case 'Game':
+        newPiece = Piece.createGame(
+          null, props.title, props.createdIn, props.genre, props.imageUrl,
+          props.summary, props.completionDate.toDate(), props.console);
+        break;
+      default:
+        alert('ERROR : Unknown piece type : ' + props.type);
+        return;
     }
-    this.libraryService.createPiece(newPiece);
+    this.libraryService.createPiece(newPiece).subscribe(
+      (_) => {
+        // navigate back to the pieces list will reload all pieces and pick up the new one
+        this.router.navigate(['library']);
+      }
+    );
     this.router.navigate(['library']);
   }
 }

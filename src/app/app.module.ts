@@ -19,6 +19,7 @@ import { LibraryComponent } from './library/library/library.component';
 import { LoginComponent } from './auth/login/login.component';
 import { CreatePieceComponent } from './library/create-piece/create-piece.component';
 import { PieceComponent } from './library/piece/piece.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { PieceComponent } from './library/piece/piece.component';
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     /* TODO move Material imports to a dedicated module */
     MatToolbarModule,
     MatButtonModule,
