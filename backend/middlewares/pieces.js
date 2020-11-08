@@ -231,13 +231,13 @@ exports.deletePiece = (request, response, _next) => {
                 // }
 
                 // perform deletion
-                return Piece.deleteOne({ _id: pieceId });
+                return Piece.findOneAndRemove({ _id: pieceId });
             }
         ).then(
-            (_deletionResult) => {
+            (deletedPiece) => {
                 return response.status(SUCCESS_CODE).json({
                     message: 'Deleted piece successfully.',
-                    id: pieceId
+                    piece: deletedPiece
                 });
             }
         ).catch(
@@ -247,14 +247,14 @@ exports.deletePiece = (request, response, _next) => {
                     return response.status(BAD_REQUEST_CODE).json({
                         error: "CastError",
                         message: "Failed to cast " + e.value + " to " + e.kind,
-                        id: null
+                        piece: null
                     });
                 }
                 // Generic error handler for unexpected errors
                 return response.status(SERVER_ERROR_CODE).json({
                     message: "Failed to delete piece " + pieceId,
                     error: e,
-                    id: null
+                    piece: null
                 });
             }
         );

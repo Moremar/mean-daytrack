@@ -27,3 +27,8 @@ To run it locally :
  - ng serve -o --port 3311   (any available port is fine)
  - cd backend/
  - nodemon server.js --config ../nodemon.json (must set the DB infos first in nodemon.json)
+
+
+### Copyrights
+
+The icons used in this project are royalty-free and are available at https://www.flaticon.com/

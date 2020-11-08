@@ -26,12 +26,14 @@ export class LibraryComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    // fetch the posts from the backend
-    this.libraryService.fetchPieces(this.pageIndex, this.pageSize);
     // listen to any change on the posts
     this.piecesSub = this.libraryService.getPiecesObservable().subscribe(
       (pieces: Piece[]) => {
         this.pieces = pieces;
+        // intial fetch of the pieces from the backend
+        if (pieces.length === 0) {
+          this.libraryService.fetchPieces(this.pageIndex, this.pageSize);
+        }
       }
     );
   }

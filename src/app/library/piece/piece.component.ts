@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { LibraryService } from '../library.service';
 import { PieceType } from '../model/piece-type.enum';
 import { Piece } from '../model/piece.model';
 
@@ -13,7 +15,8 @@ export class PieceComponent implements OnInit {
   @Input() piece: Piece;
   panelOpenState: boolean;
 
-  constructor() { }
+  constructor(private libraryService: LibraryService,
+              private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -46,5 +49,19 @@ export class PieceComponent implements OnInit {
 
   hasSeason(): boolean {
     return this.isType('Series') && this.piece.season != null;
+  }
+
+
+    // TODO add a confirmation popup (potentially with Angular Material MatDialog component)
+
+    onDelete(event: Event): void {
+    // prevent the card to open when the Delete button is clicked
+    event.stopPropagation();
+    this.libraryService.deletePiece(this.piece.id).subscribe(
+      (_) => {
+        this.libraryService.fetchPieces(null, null);
+        this.router.navigate(['library']);
+      }
+    );
   }
 }

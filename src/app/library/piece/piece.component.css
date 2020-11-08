@@ -32,3 +32,26 @@ mat-panel-description span {
 .spacer {
     padding-left: 40px;
 }
+
+.actionButtons {
+    float: right;
+}
+
+img.action-icon {
+    height: 15px;
+    vertical-align: middle;
+}
+
+.delete-icon {
+    height: 22px;
+    padding: 0 3px;
+    border-radius: 5px;
+    /* transparent 1px border so it does not glitch on hover when we add a 1px red border */
+    border: 1px solid transparent;
+}
+
+.delete-icon:hover {
+    /* border color extracted from the icon with Colorpick Eyedropper Chrome extension */
+    border: 1px solid #e76e54;
+    background-color: #fdd;
+}

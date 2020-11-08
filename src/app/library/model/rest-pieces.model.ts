@@ -30,3 +30,9 @@ export interface RestPostPieceResponse {
   message: string;
   piece: RestPiece;
 }
+
+// REST response from the backend on DELETE /api/pieces/:id
+export interface RestDeletePieceResponse {
+  message: string;
+  piece: RestPiece;
+}

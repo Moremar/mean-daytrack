@@ -13,9 +13,13 @@
             <span *ngIf="isType('Game')">{{piece.console}} </span>
             <span *ngIf="piece.year != null">({{piece.year}})</span>
         </mat-panel-description>
+        <div class="action-buttons">
+            <div class="delete-icon" (click)="onDelete($event)">
+                <img class="action-icon" src="../../../assets/images/delete.svg" alt="Not found" />
+            </div>
+        </div>
     </mat-expansion-panel-header>
     <div>
-        <!-- <img class="piece-image" src="../../../assets/images/harry_potter_1.jpg" alt="Not found" /> -->
         <img *ngIf="piece.imageUrl != ''" class="piece-image" src="{{piece.imageUrl}}" alt="Not found" />
         <p>
             <i>{{piece.genre}}</i>

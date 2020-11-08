@@ -74,7 +74,7 @@ export class CreatePieceComponent implements OnInit {
     }
     this.libraryService.createPiece(newPiece).subscribe(
       (_) => {
-        // navigate back to the pieces list will reload all pieces and pick up the new one
+        this.libraryService.fetchPieces(null, null);
         this.router.navigate(['library']);
       }
     );
