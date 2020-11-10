@@ -1,5 +1,5 @@
 <mat-card>
-    <form (submit)="onSubmit(newItemForm)" #newItemForm="ngForm">
+    <form (submit)="onSubmit(pieceForm)" #pieceForm="ngForm">
         <!-- Item type -->
         <mat-form-field class="noblock">
             <mat-label>Item type</mat-label>
@@ -57,7 +57,7 @@
         <div>
             <mat-form-field>
                 <mat-label>Image URL</mat-label>
-                <textarea cdkTextareaAutosize type="text" matInput name="imageUrl" ngModel #summary="ngModel"></textarea>
+                <textarea cdkTextareaAutosize type="text" matInput name="imageUrl" ngModel #imageUrl="ngModel"></textarea>
             </mat-form-field>
         </div>
 
@@ -79,6 +79,14 @@
             </mat-form-field>
         </div>
 
+        <!-- Director -->
+        <div>
+            <mat-form-field *ngIf="itemType === 'Movie' || itemType === 'Series'">
+                <mat-label>Director</mat-label>
+                <input type="text" matInput name="director" ngModel #director="ngModel" />
+            </mat-form-field>
+        </div>
+
         <!-- Actors -->
         <mat-form-field *ngIf="itemType === 'Movie' || itemType === 'Series'">
             <mat-label>Actors</mat-label>
@@ -94,7 +102,7 @@
         </div>
 
         <div>
-            <button mat-flat-button color="primary" type="submit">Create</button>
+            <button mat-flat-button color="primary" type="submit">{{ editionMode ? 'Update' : 'Create'}}</button>
         </div>
     </form>
 </mat-card>

@@ -8,7 +8,7 @@ export class RestPiece {
     public genre: string,
     public imageUrl: string,
     public summary: string,
-    public completionDate: Date,
+    public completionDate: string,
     public author: string,
     public director: string,
     public actors: string[],
@@ -23,6 +23,12 @@ export interface RestGetPiecesResponse {
   message: string;
   pieces: RestPiece[];
   total: number;
+}
+
+// REST response from the backend on GET /api/pieces/:id
+export interface RestGetPieceResponse {
+  message: string;
+  piece: RestPiece;
 }
 
 // REST response from the backend on POST /api/pieces

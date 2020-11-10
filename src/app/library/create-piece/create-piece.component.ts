@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
+
 import { LibraryService } from '../library.service';
+import { PieceType } from '../model/piece-type.enum';
 import { Piece } from '../model/piece.model';
 
 
@@ -20,14 +22,70 @@ export class CreatePieceComponent implements OnInit {
   itemType: string = null;
   itemTypes = ['Book', 'Comic', 'Movie', 'Series', 'Game'];
   today: moment.Moment;
+  loading = false;
+  editionMode = false;
+  editedPiece: Piece = null;
+
+  @ViewChild('pieceForm') pieceForm: NgForm;
 
   constructor(private libraryService: LibraryService,
-              private router: Router) {}
+              private router: Router,
+              private activeRoute: ActivatedRoute) {}
 
 
   ngOnInit(): void {
-    this.itemType = this.itemTypes[0];
-    this.today = moment();
+    this.loading = true;
+    this.activeRoute.paramMap.subscribe(
+      (paramMap) => {
+        this.editionMode = paramMap.has('id');
+        if (this.editionMode) {
+          // load the piece to edit
+          this.libraryService.getPieceObservable(paramMap.get('id')).subscribe((piece: Piece) => {
+            this.editedPiece = piece;
+
+            // set the piece type to update the form, and include set setValue() in a setTimeout()
+            // so the NgForm controls gets refreshed with the actual piece type
+            this.itemType = PieceType.toString(this.editedPiece.type);
+
+            setTimeout(() => {
+            // pre-populate the form with the edited piece
+            let initialValue: any = {
+              // common fields
+              type: PieceType.toString(this.editedPiece.type),
+              title: this.editedPiece.title,
+              genre: this.editedPiece.genre,
+              summary: this.editedPiece.summary,
+              createdIn: this.editedPiece.year,
+              imageUrl: this.editedPiece.imageUrl,
+              completionDate: this.editedPiece.completionDate
+            };
+            // piece-type specific fields
+            if (this.editedPiece.type === PieceType.BOOK || this.editedPiece.type === PieceType.COMIC) {
+              initialValue = { ...initialValue, author: this.editedPiece.author };
+            }
+            if (this.editedPiece.type === PieceType.MOVIE || this.editedPiece.type === PieceType.SERIES) {
+              initialValue = { ...initialValue, director: this.editedPiece.director, actors: this.editedPiece.actors };
+            }
+            if (this.editedPiece.type === PieceType.GAME) {
+              initialValue = { ...initialValue, console: this.editedPiece.console };
+            }
+            if (this.editedPiece.type === PieceType.COMIC) {
+              initialValue = { ...initialValue, volume: this.editedPiece.volume };
+            }
+            if (this.editedPiece.type === PieceType.SERIES) {
+              initialValue = { ...initialValue, season: this.editedPiece.season };
+            }
+            this.pieceForm.setValue(initialValue);
+            });
+          });
+        } else {
+          // creation mode
+          this.itemType = PieceType.toString(PieceType.BOOK);
+          this.today = moment();
+        }
+        this.loading = false;
+      }
+    );
   }
 
 
@@ -37,47 +95,55 @@ export class CreatePieceComponent implements OnInit {
       return;
     }
 
-    console.log('Submitting new item:');
-    console.log(newPieceForm.form.value);
-
     const props = newPieceForm.form.value;
     let newPiece: Piece;
+
+    // completionDate is either a Moment (if selected in the date picker) or a Date (if populated from the backend)
+    const completionDate = props.completionDate instanceof Date ? props.completionDate : props.completionDate.toDate();
+
     switch (props.type) {
       case 'Book':
         newPiece = Piece.createBook(
           null, props.title, props.createdIn, props.genre, props.imageUrl,
-          props.summary, props.completionDate.toDate(), props.author);
+          props.summary, completionDate, props.author);
         break;
       case 'Comic':
         newPiece = Piece.createComic(
           null, props.title, props.createdIn, props.genre, props.imageUrl,
-          props.summary, props.completionDate.toDate(), props.author, props.volume);
+          props.summary, completionDate, props.author, props.volume);
         break;
       case 'Movie':
         newPiece = Piece.createMovie(
           null, props.title, props.createdIn, props.genre, props.imageUrl,
-          props.summary, props.completionDate.toDate(), props.director, props.actors);
+          props.summary, completionDate, props.director, props.actors);
         break;
       case 'Series':
         newPiece = Piece.createSeries(
           null, props.title, props.createdIn, props.genre, props.imageUrl,
-          props.summary, props.completionDate.toDate(), props.director, props.actors, props.season);
+          props.summary, completionDate, props.director, props.actors, props.season);
         break;
       case 'Game':
         newPiece = Piece.createGame(
           null, props.title, props.createdIn, props.genre, props.imageUrl,
-          props.summary, props.completionDate.toDate(), props.console);
+          props.summary, completionDate, props.console);
         break;
       default:
-        alert('ERROR : Unknown piece type : ' + props.type);
-        return;
+        throw Error('Unknown piece type : ' + props.type);
     }
-    this.libraryService.createPiece(newPiece).subscribe(
-      (_) => {
-        this.libraryService.fetchPieces(null, null);
-        this.router.navigate(['library']);
-      }
-    );
+
+    if (this.editionMode) {
+      // TODO call backend
+      console.log('TODO Edit the piece in the backend');
+    } else {
+      console.log('Creating new piece :');
+      console.log(newPiece);
+      this.libraryService.createPiece(newPiece).subscribe(
+        (_) => {
+          this.libraryService.fetchPieces(null, null);
+          this.router.navigate(['library']);
+        }
+      );
+    }
     this.router.navigate(['library']);
   }
 }

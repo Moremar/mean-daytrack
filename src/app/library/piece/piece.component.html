@@ -14,6 +14,9 @@
             <span *ngIf="piece.year != null">({{piece.year}})</span>
         </mat-panel-description>
         <div class="action-buttons">
+            <div class="edit-icon" (click)="onEdit($event)">
+                <img class="action-icon" src="../../../assets/images/edit.svg" alt="Not found" />
+            </div>
             <div class="delete-icon" (click)="onDelete($event)">
                 <img class="action-icon" src="../../../assets/images/delete.svg" alt="Not found" />
             </div>

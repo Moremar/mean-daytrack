@@ -5,7 +5,8 @@ import { map } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { Piece } from './model/piece.model';
-import { RestGetPiecesResponse, RestPostPieceResponse, RestDeletePieceResponse, RestPiece } from './model/rest-pieces.model';
+import { RestGetPiecesResponse, RestGetPieceResponse,
+         RestPostPieceResponse, RestDeletePieceResponse } from './model/rest-pieces.model';
 
 
 const PIECES_URL = environment.backendUrl + '/pieces';
@@ -28,12 +29,23 @@ export class LibraryService {
   }
 
 
+  getPieceObservable(pieceId: string): Observable<Piece> {
+    console.log('DEBUG - Fetching piece ' + pieceId + ' from the backend');
+    const url = `${PIECES_URL}/${pieceId}`;
+    return this.http.get(url).pipe(
+      map((httpResponse: RestGetPieceResponse) => {
+        return Piece.fromRestPiece(httpResponse.piece);
+      })
+    );
+  }
+
+
   // TODO the pageIndex and pageSize may need to be set in the service instead of provided with arguments,
   //      since the fetch is called from places not aware of the page settings (e.g. component deletion or creation)
 
   fetchPieces(pageIndex: number, pageSize: number): void {
     console.log('DEBUG - Fetching pieces from the backend ' + pageIndex + '/' + pageSize);
-    const url = PIECES_URL + '?pageIndex=' + pageIndex + '&pageSize=' + pageSize;
+    const url = `${PIECES_URL}?pageIndex=${pageIndex}&pageSize=${pageSize}`;
     this.http.get(url).pipe(
       map( (httpResponse: RestGetPiecesResponse) => {
         console.log('Received response from GET ' + url);

@@ -8,6 +8,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'library', component: LibraryComponent },
   { path: 'create', component: CreatePieceComponent },
+  // use same component for edit and create, will distinguish from the :id path parameter
+  { path: 'edit/:id', component: CreatePieceComponent },
   { path: '', redirectTo: 'library', pathMatch: 'full' }
 ];
 

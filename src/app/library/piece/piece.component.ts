@@ -7,6 +7,7 @@ import { PieceType } from '../model/piece-type.enum';
 import { Piece } from '../model/piece.model';
 import { PieceDeletionDialogComponent } from './piece-deletion-dialog/piece-deletion-dialog.component';
 
+// TODO add in the template the completion date (maybe in header and move year + author inside the card)
 
 @Component({
   selector: 'app-piece',
@@ -56,10 +57,14 @@ export class PieceComponent implements OnInit {
   }
 
 
-    // TODO add a confirmation popup (potentially with Angular Material MatDialog component)
-    // https://material.angular.io/components/dialog/overview
+  onEdit(event: Event): void {
+    // prevent the card to open when the Delete button is clicked
+    event.stopPropagation();
+    this.router.navigate(['edit', this.piece.id]);
+  }
 
-    onDelete(event: Event): void {
+
+  onDelete(event: Event): void {
     // prevent the card to open when the Delete button is clicked
     event.stopPropagation();
 
