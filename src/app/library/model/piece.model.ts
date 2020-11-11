@@ -107,7 +107,8 @@ export class Piece {
   }
 
   pretty(): string {
+    const actors = this.actors ? '[' + this.actors.join(', ') + ']' : '[]';
     return `${PieceType.toString(this.type)}(${this.id}, ${this.title}, ${this.year}, ${this.genre}, ${this.imageUrl}, `
-    + `${this.summary}, ${this.completionDate}, ${this.author}, ${this.director}, ${this.actors}, ${this.console}, ${this.season}, ${this.volume})`;
+    + `${this.summary}, ${this.completionDate}, ${this.author}, ${this.director}, ${actors}, ${this.console}, ${this.season}, ${this.volume})`;
   }
 }

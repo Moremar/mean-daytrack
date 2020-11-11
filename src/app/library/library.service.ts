@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { Piece } from './model/piece.model';
-import { RestGetPiecesResponse, RestGetPieceResponse,
+import { RestGetPiecesResponse, RestGetPieceResponse, RestPutPieceResponse,
          RestPostPieceResponse, RestDeletePieceResponse } from './model/rest-pieces.model';
 
 
@@ -62,6 +62,7 @@ export class LibraryService {
   }
 
 
+  // Piece Creation
   createPiece(newPiece: Piece): Observable<Piece> {
     console.log(`Adding new piece ${newPiece.pretty()}`);
 
@@ -78,7 +79,26 @@ export class LibraryService {
     );
   }
 
+  // Piece edition
+  updatePiece(newPiece: Piece): Observable<Piece> {
+    console.log(`Editing existing piece ${newPiece.pretty()}`);
 
+    if (newPiece.id == null) {
+      throw Error('A piece ID is required to edit a piece');
+    }
+
+    const url = `${PIECES_URL}/${newPiece.id}`;
+    return this.http.put(url, newPiece.toRestPiece()).pipe(
+      map( (httpResponse: RestPutPieceResponse) => {
+        console.log('Received response from PUT ' + url);
+        console.log(httpResponse);
+        return Piece.fromRestPiece(httpResponse.piece);
+      })
+    );
+  }
+
+
+  // Piece Deletion
   deletePiece(pieceId: string): Observable<Piece> {
     console.log(`Deleting piece with ID = ${pieceId}`);
 

@@ -37,6 +37,12 @@ export interface RestPostPieceResponse {
   piece: RestPiece;
 }
 
+// REST response from the backend on PUT /api/pieces/:id
+export interface RestPutPieceResponse {
+  message: string;
+  piece: RestPiece;
+}
+
 // REST response from the backend on DELETE /api/pieces/:id
 export interface RestDeletePieceResponse {
   message: string;

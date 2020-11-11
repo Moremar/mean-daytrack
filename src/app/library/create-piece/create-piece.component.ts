@@ -100,6 +100,8 @@ export class CreatePieceComponent implements OnInit {
 
     // completionDate is either a Moment (if selected in the date picker) or a Date (if populated from the backend)
     const completionDate = props.completionDate instanceof Date ? props.completionDate : props.completionDate.toDate();
+    const actors = props.actors ? props.actors.split(',').map(x => x.trim()) : [];
+    console.log(actors);
 
     switch (props.type) {
       case 'Book':
@@ -115,12 +117,12 @@ export class CreatePieceComponent implements OnInit {
       case 'Movie':
         newPiece = Piece.createMovie(
           null, props.title, props.createdIn, props.genre, props.imageUrl,
-          props.summary, completionDate, props.director, props.actors);
+          props.summary, completionDate, props.director, actors);
         break;
       case 'Series':
         newPiece = Piece.createSeries(
           null, props.title, props.createdIn, props.genre, props.imageUrl,
-          props.summary, completionDate, props.director, props.actors, props.season);
+          props.summary, completionDate, props.director, actors, props.season);
         break;
       case 'Game':
         newPiece = Piece.createGame(
@@ -132,13 +134,18 @@ export class CreatePieceComponent implements OnInit {
     }
 
     if (this.editionMode) {
-      // TODO call backend
-      console.log('TODO Edit the piece in the backend');
+      newPiece.id = this.editedPiece.id;
+      this.libraryService.updatePiece(newPiece).subscribe(
+        (_) => {
+          // now that the piece is updated in the backend, refetch pieces and move back to library
+          this.libraryService.fetchPieces(null, null);
+          this.router.navigate(['library']);
+        }
+      );
     } else {
-      console.log('Creating new piece :');
-      console.log(newPiece);
       this.libraryService.createPiece(newPiece).subscribe(
         (_) => {
+          // now that the new piece is created in the backend, refetch pieces and move back to library
           this.libraryService.fetchPieces(null, null);
           this.router.navigate(['library']);
         }

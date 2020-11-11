@@ -192,10 +192,8 @@ exports.editPiece = (request, response, _next) => {
                     console: request.body.console,
                     season: request.body.season,
                     volume: request.body.volume,
-                }, { new: true } /* to get the updated document */ )
+                }, { new: true } /* to return the updated document */ )
                 .then((updatedPiece) => {
-                    console.log("GOT AFTER UPDATE :");
-                    console.log(updatedPiece);
                     response.status(SUCCESS_CODE).json({
                         message: 'Updated piece successfully.',
                         piece: updatedPiece
