@@ -33,6 +33,10 @@ export class AuthService {
     return this._authToken;
   }
 
+  getLoggedUserObservable(): Observable<User> {
+    return this._loggedUserSubject.asObservable();
+  }
+
 
   signup(email: string, password: string): Observable<boolean> {
     const credentials = new Credentials(email, password);

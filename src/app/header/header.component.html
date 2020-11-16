@@ -1,12 +1,13 @@
 <mat-toolbar color="primary">
     <div class="logo">DayTrack</div>
     <div>
-        <a mat-button [routerLink]="'/library'" routerLinkActive="active-link"> Library </a>
-        <a mat-button [routerLink]="'/create'" routerLinkActive="active-link"> Create </a>
+        <a *ngIf="loggedIn" mat-button [routerLink]="'/library'" routerLinkActive="active-link"> Library </a>
+        <a *ngIf="loggedIn" mat-button [routerLink]="'/create'" routerLinkActive="active-link"> Create </a>
     </div>
     <span class="spacer"></span>
     <div>
-        <a mat-button [routerLink]="'/signup'" routerLinkActive="active-link"> Sign up </a>
-        <a mat-button [routerLink]="'/login'" routerLinkActive="active-link"> Login </a>
+        <a *ngIf="!loggedIn" mat-button [routerLink]="'/signup'" routerLinkActive="active-link"> Sign up </a>
+        <a *ngIf="!loggedIn" mat-button [routerLink]="'/login'" routerLinkActive="active-link"> Login </a>
+        <a *ngIf="loggedIn" mat-button (click)="onLogout()"> Logout </a>
     </div>
 </mat-toolbar>

@@ -103,7 +103,7 @@ export class CreatePieceComponent implements OnInit {
 
     // trim and filter actors list
     let actors = [];
-    if (props.actors !== null) {
+    if (props.actors) {
       actors = props.actors.split(',').map(x => x.trim()).filter(x => x.length > 0);
     }
 

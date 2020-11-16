@@ -49,7 +49,12 @@ export class LoginComponent implements OnInit {
       },
       (e: HttpErrorResponse) => {
         // the error will show in the login screen
-        this.errorMessage = e.error.errorType + ' : ' + e.error.errorMessage;
+        if (e.error && e.error.errorType && e.error.errorMessage) {
+          this.errorMessage = e.error.errorType + ' : ' + e.error.errorMessage;
+        } else {
+          // not an error from the backend, most likely the backend could not be reached
+          this.errorMessage = 'An error occured while login.';
+        }
         this.loading = false;
       }
     );
