@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 // internal includes
 const Piece = require('../models/piece'); // Mongoose model for MongoDB Pieces collections
+const httpCodes = require('../http-codes');
 
 
 /*
@@ -11,17 +12,9 @@ const Piece = require('../models/piece'); // Mongoose model for MongoDB Pieces c
  */
 
 
-// HTTP response codes
-const SUCCESS_CODE = 200;
-const BAD_REQUEST_CODE = 400;
-const UNAUTHAURIZED_CODE = 401;
-const NOT_FOUND_CODE = 404;
-const SERVER_ERROR_CODE = 500;
-
-
 // middleware to get all pieces (no authentication required)
 exports.getPieces = (request, response, _next) => {
-    console.log('Middleware: GET ' + request.originalUrl);
+    console.log('Middleware [GetPieces] ' + request.originalUrl);
     const mongoQuery = Piece.find();
 
     // Use query parameters for pagination
@@ -37,7 +30,7 @@ exports.getPieces = (request, response, _next) => {
         (pieces) => {
             Piece.countDocuments().then(
                 (total) => {
-                    response.status(SUCCESS_CODE).json({
+                    response.status(httpCodes.SUCCESS).json({
                         message: 'Retrieved pieces successfully.',
                         pieces: pieces,
                         total: total
@@ -47,10 +40,12 @@ exports.getPieces = (request, response, _next) => {
         }
     ).catch(
         (e) => {
-            response.status(SERVER_ERROR_CODE).json({
-                message: "Failed to get the pieces from the server.",
-                error: e,
-                pieces: null
+            // Hopefully we do not reach here, if we do we need to update the code to handle this specific error
+            // to provide a better error message in the response
+            console.log(e);
+            response.status(httpCodes.SERVER_ERROR).json({
+                errorMessage: "Failed to get the pieces from the server.",
+                error: e
             });
         }
     );
@@ -60,20 +55,19 @@ exports.getPieces = (request, response, _next) => {
 // middleware to get a single piece
 exports.getPiece = (request, response, _next) => {
     const pieceId = request.params.id;
-    console.log('Middleware: GET /api/pieces/' + pieceId);
+    console.log('Middleware [getPiece] ' + request.originalUrl);
     // get the piece from MongoDB
     Piece.findOne({ _id: pieceId })
         .then(
             (piece) => {
                 // piece must exist
                 if (!piece) {
-                    return response.status(NOT_FOUND_CODE).json({
-                        error: "NotFoundError",
-                        message: 'No piece with ID ' + pieceId,
-                        piece: null
+                    return response.status(httpCodes.NOT_FOUND).json({
+                        errorType: "Not found",
+                        errorMessage: 'No piece was found with ID = ' + pieceId
                     });
                 }
-                response.status(SUCCESS_CODE).json({
+                response.status(httpCodes.SUCCESS).json({
                     message: 'Retrieved piece successfully.',
                     piece: piece
                 });
@@ -83,17 +77,15 @@ exports.getPiece = (request, response, _next) => {
                 console.log(e);
                 if (e instanceof mongoose.Error.CastError) {
                     // the provided pieceId has an invalid format
-                    return response.status(BAD_REQUEST_CODE).json({
-                        error: "CastError",
-                        message: "Failed to cast " + e.value + " to " + e.kind,
-                        piece: null
+                    return response.status(httpCodes.BAD_REQUEST).json({
+                        errorType: "Invalid ID",
+                        errorMessage: "Failed to cast piece ID " + e.value + " into " + e.kind
                     });
                 }
                 // generic error
-                response.status(SERVER_ERROR_CODE).json({
-                    message: "Failed to get piece " + pieceId + " from the server.",
-                    error: e,
-                    piece: null
+                response.status(httpCodes.SERVER_ERROR).json({
+                    errorType: 'Server Error',
+                    errorMessage: "Failed to get piece " + pieceId + " from the server."
                 });
             }
         );
@@ -102,7 +94,7 @@ exports.getPiece = (request, response, _next) => {
 
 // middleware for the piece creation
 exports.createPiece = (request, response, _next) => {
-    console.log('Middleware: POST /api/pieces');
+    console.log('Middleware [createPiece] ' + request.originalUrl);
     console.log(request.body);
 
     const piece = new Piece({
@@ -131,7 +123,7 @@ exports.createPiece = (request, response, _next) => {
     piece.save()
         .then(
             (createdPiece) => {
-                response.status(SUCCESS_CODE).json({
+                response.status(httpCodes.SUCCESS).json({
                     message: 'Created piece successfully.',
                     piece: createdPiece
                 });
@@ -140,10 +132,9 @@ exports.createPiece = (request, response, _next) => {
             (e) => {
                 console.log(e);
                 // generic error handler
-                response.status(SERVER_ERROR_CODE).json({
-                    message: "Failed to create the piece on the server.",
-                    error: e,
-                    piece: null
+                response.status(httpCodes.SERVER_ERROR).json({
+                    errorType: 'Server error',
+                    errorMessage: "Failed to create the piece on the server."
                 });
             }
         );
@@ -153,7 +144,7 @@ exports.createPiece = (request, response, _next) => {
 // // middleware to edit a piece
 exports.editPiece = (request, response, _next) => {
     const pieceId = request.params.id;
-    console.log('Middleware: PUT /api/pieces/' + pieceId);
+    console.log('Middleware [editPiece] ' + request.originalUrl);
     console.log(request.body);
 
     // check that the piece exists and is owned by the authenticated user
@@ -161,10 +152,9 @@ exports.editPiece = (request, response, _next) => {
         (piece) => {
             // piece must exist
             if (!piece) {
-                return response.status(NOT_FOUND_CODE).json({
-                    error: "NotFoundError",
-                    message: 'No piece with ID ' + pieceId,
-                    piece: null
+                return response.status(httpCodes.NOT_FOUND).json({
+                    errorType: "Not found",
+                    errorMessage: 'No piece was found with ID = ' + pieceId
                 });
             }
             // piece must belong to authenticated user
@@ -194,7 +184,7 @@ exports.editPiece = (request, response, _next) => {
                     volume: request.body.volume,
                 }, { new: true } /* to return the updated document */ )
                 .then((updatedPiece) => {
-                    response.status(SUCCESS_CODE).json({
+                    response.status(httpCodes.SUCCESS).json({
                         message: 'Updated piece successfully.',
                         piece: updatedPiece
                     });
@@ -206,17 +196,16 @@ exports.editPiece = (request, response, _next) => {
 // middleware to delete a piece
 exports.deletePiece = (request, response, _next) => {
     const pieceId = request.params.id;
-    console.log('Middleware: DELETE /api/pieces/' + pieceId);
+    console.log('Middleware [deletePiece] ' + request.originalUrl);
 
     Piece.findOne({ _id: pieceId })
         .then(
             (piece) => {
                 // piece must exist
                 if (!piece) {
-                    return response.status(NOT_FOUND_CODE).json({
-                        error: "NotFoundError",
-                        message: 'No piece with ID ' + pieceId,
-                        piece: null
+                    return response.status(httpCodes.NOT_FOUND).json({
+                        errorType: "Not Found",
+                        errorMessage: 'No piece was found with ID = ' + pieceId
                     });
                 }
                 // piece must belong to authenticated user
@@ -233,26 +222,25 @@ exports.deletePiece = (request, response, _next) => {
             }
         ).then(
             (deletedPiece) => {
-                return response.status(SUCCESS_CODE).json({
+                return response.status(httpCodes.SUCCESS).json({
                     message: 'Deleted piece successfully.',
                     piece: deletedPiece
                 });
             }
         ).catch(
             (e) => {
+                console.log(e);
                 if (e instanceof mongoose.Error.CastError) {
                     // the provided pieceId has an invalid format
-                    return response.status(BAD_REQUEST_CODE).json({
-                        error: "CastError",
-                        message: "Failed to cast " + e.value + " to " + e.kind,
-                        piece: null
+                    return response.status(httpCodes.BAD_REQUEST).json({
+                        errorType: "Invalid ID",
+                        errorMessage: "Failed to cast the ID " + e.value + " into " + e.kind
                     });
                 }
                 // Generic error handler for unexpected errors
-                return response.status(SERVER_ERROR_CODE).json({
-                    message: "Failed to delete piece " + pieceId,
-                    error: e,
-                    piece: null
+                return response.status(httpCodes.SERVER_ERROR).json({
+                    errorType: 'Server error',
+                    errorMessage: "Failed to delete piece " + pieceId
                 });
             }
         );

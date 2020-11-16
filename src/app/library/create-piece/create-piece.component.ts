@@ -64,7 +64,7 @@ export class CreatePieceComponent implements OnInit {
               initialValue = { ...initialValue, author: this.editedPiece.author };
             }
             if (this.editedPiece.type === PieceType.MOVIE || this.editedPiece.type === PieceType.SERIES) {
-              initialValue = { ...initialValue, director: this.editedPiece.director, actors: this.editedPiece.actors };
+              initialValue = { ...initialValue, director: this.editedPiece.director, actors: this.editedPiece.actors.join(', ') };
             }
             if (this.editedPiece.type === PieceType.GAME) {
               initialValue = { ...initialValue, console: this.editedPiece.console };
@@ -100,8 +100,12 @@ export class CreatePieceComponent implements OnInit {
 
     // completionDate is either a Moment (if selected in the date picker) or a Date (if populated from the backend)
     const completionDate = props.completionDate instanceof Date ? props.completionDate : props.completionDate.toDate();
-    const actors = props.actors ? props.actors.split(',').map(x => x.trim()) : [];
-    console.log(actors);
+
+    // trim and filter actors list
+    let actors = [];
+    if (props.actors !== null) {
+      actors = props.actors.split(',').map(x => x.trim()).filter(x => x.length > 0);
+    }
 
     switch (props.type) {
       case 'Book':

@@ -12,6 +12,9 @@ export class HeaderComponent implements OnInit {
 
   constructor() { }
 
+// TODO add a logout button when the user is logged in
+// TODO hide the Library and Create buttons when not logged in
+
   ngOnInit(): void {
   }
 }

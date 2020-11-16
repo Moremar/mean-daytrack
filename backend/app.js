@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 // REST API routes handlers
 const piecesRoutes = require('./routes/pieces-routes');
-//const authRoutes = require('./routes/auth-routes');
+const authRoutes = require('./routes/auth-routes');
 
 
 // Connect Mongoose to MongoDB
@@ -67,7 +67,7 @@ app.use((_request, response, next) => {
 
 // REST API routes handlers
 app.use('/api/pieces', piecesRoutes);
-//app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 
 
 // Fallback middleware called when no other middleware could handle the request

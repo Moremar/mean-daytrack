@@ -2,7 +2,7 @@
 const express = require('express'); // backend framework
 
 // Middlewares
-//const verifyAuth = require('../middlewares/verify-auth');
+const verifyAuth = require('../middlewares/verify-auth');
 const PiecesController = require('../middlewares/pieces');
 
 // TODO check the user authentication fot all endpoints
@@ -21,27 +21,27 @@ const router = express.Router();
 
 // middleware to get all pieces
 router.get('/',
-    //    verifyAuth,
+    verifyAuth,
     PiecesController.getPieces);
 
 // middleware to get a single piece
 router.get('/:id',
-    //    verifyAuth,
+    verifyAuth,
     PiecesController.getPiece);
 
 // middleware to create a piece
 router.post('/',
-    //    verifyAuth,
+    verifyAuth,
     PiecesController.createPiece);
 
 // middleware to edit a piece
 router.put('/:id',
-    // verifyAuth,
+    verifyAuth,
     PiecesController.editPiece);
 
 // middleware to delete a piece
 router.delete('/:id',
-    //  verifyAuth,
+    verifyAuth,
     PiecesController.deletePiece);
 
 // export the router containing all routes handlers for /api/pieces section
