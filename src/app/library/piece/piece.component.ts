@@ -56,6 +56,13 @@ export class PieceComponent implements OnInit {
     return this.isType('Series') && this.piece.season != null;
   }
 
+  getCompletionDate(): string {
+    const date = this.piece.completionDate;
+    return `${date.getDate()}`.padStart(2, '0') + '/'
+         + `${date.getMonth() + 1}`.padStart(2, '0') + '/'
+         + `${date.getFullYear()}`;
+  }
+
 
   onEdit(event: Event): void {
     // prevent the card to open when the Delete button is clicked

@@ -33,8 +33,15 @@ mat-panel-description span {
     padding-left: 40px;
 }
 
-.actionButtons {
+.right {
     float: right;
+}
+
+.completion-date {
+    display: inline-block;
+    margin-right: 20px;
+    vertical-align: middle;
+    font-style: italic;
 }
 
 img.action-icon {
