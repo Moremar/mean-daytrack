@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { Piece } from './model/piece.model';
 import { RestGetPiecesResponse, RestGetPieceResponse, RestPutPieceResponse,
          RestPostPieceResponse, RestDeletePieceResponse } from './model/rest-pieces.model';
+import { PieceFilter } from './model/piece-filter.model';
 
 
 const PIECES_URL = environment.backendUrl + '/pieces';
@@ -16,22 +17,24 @@ const PIECES_URL = environment.backendUrl + '/pieces';
 })
 export class LibraryService {
 
-  private _piecesSubject = new BehaviorSubject<Piece[]>([]);
+  private _allPieces: Piece[] = [];
+  private _filteredPiecesSubject = new BehaviorSubject<Piece[]>([]);
 
+  private pieceFilter = new PieceFilter(null);
 
   constructor(private http: HttpClient) {
   }
 
   // called on logout to not keep the pieces in memory
   clearPieces(): void {
-    this._piecesSubject.next([]);
+    this._allPieces = [];
+    this._filteredPiecesSubject.next([]);
   }
 
   // expose the pieces as a read-only observable (so the pieces list is modified only by the service)
-  getPiecesObservable(): Observable<Piece[]> {
-    return this._piecesSubject.asObservable();
+  getFilteredPiecesObservable(): Observable<Piece[]> {
+    return this._filteredPiecesSubject.asObservable();
   }
-
 
   getPieceObservable(pieceId: string): Observable<Piece> {
     console.log('DEBUG - Fetching piece ' + pieceId + ' from the backend');
@@ -61,7 +64,8 @@ export class LibraryService {
       })
     )
     .subscribe( (pieces: Piece[]) => {
-      this._piecesSubject.next(pieces);
+      this._allPieces = pieces;
+      this.updateFilteredPieces();
     });
   }
 
@@ -118,5 +122,15 @@ export class LibraryService {
         return Piece.fromRestPiece(httpResponse.piece);
       })
     );
+  }
+
+  setFilter(textFilter: string) {
+    this.pieceFilter = new PieceFilter(textFilter);
+    this.updateFilteredPieces();
+  }
+
+  updateFilteredPieces() {
+    let filtered: Piece[] = this._allPieces.filter( x => this.pieceFilter.accept(x) );
+    this._filteredPiecesSubject.next(filtered);
   }
 }

@@ -29,7 +29,7 @@ export class LibraryComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     // listen to any change on the posts
-    this.piecesSub = this.libraryService.getPiecesObservable().subscribe(
+    this.piecesSub = this.libraryService.getFilteredPiecesObservable().subscribe(
       (pieces: Piece[]) => {
         this.pieces = pieces;
         // intial fetch of the pieces from the backend

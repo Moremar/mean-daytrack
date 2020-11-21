@@ -28,15 +28,8 @@ export class PieceComponent implements OnInit {
 
 
   getIcon(): string {
-    switch (this.piece.type) {
-      case PieceType.BOOK: return '../../../assets/images/book.svg';
-      case PieceType.COMIC: return '../../../assets/images/comic.svg';
-      case PieceType.MOVIE: return '../../../assets/images/movie.svg';
-      case PieceType.SERIES: return '../../../assets/images/series.svg';
-      case PieceType.GAME: return '../../../assets/images/game.svg';
-      default:
-        throw Error('ERROR - No icon found for piece type ' + this.piece.type);
-    }
+    const pieceTypeLower = PieceType.toString(this.piece.type).toLowerCase();
+    return `../../../assets/images/${pieceTypeLower}.svg`;
   }
 
 

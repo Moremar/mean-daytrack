@@ -23,6 +23,7 @@ import { LibraryComponent } from './library/library/library.component';
 import { CreatePieceComponent } from './library/create-piece/create-piece.component';
 import { PieceComponent } from './library/piece/piece.component';
 import { PieceDeletionDialogComponent } from './library/piece/piece-deletion-dialog/piece-deletion-dialog.component';
+import { PiecesFilterComponent } from './library/pieces-filter/pieces-filter.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { PieceDeletionDialogComponent } from './library/piece/piece-deletion-dia
     LoginComponent,
     CreatePieceComponent,
     PieceComponent,
-    PieceDeletionDialogComponent
+    PieceDeletionDialogComponent,
+    PiecesFilterComponent
   ],
   imports: [
     BrowserModule,
