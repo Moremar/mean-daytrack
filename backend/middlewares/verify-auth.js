@@ -15,7 +15,7 @@ const httpCodes = require('../http-codes');
 
 module.exports = (request, result, next) => {
     try {
-        console.log('Check authentication for query ' + request.originalUrl);
+        console.log('Middleware [verifyAuth] ' + request.originalUrl);
 
         // look for the JWT token in the "Authorization" header of the request
         const token = request.headers.authorization;
@@ -32,6 +32,7 @@ module.exports = (request, result, next) => {
     } catch (error) {
         console.warn('Authentication failed');
         return result.status(httpCodes.UNAUTHORIZED).json({
+            errorType: "Authentication",
             message: "The authentication token is missing, expired or invalid. Please login first."
         });
     }

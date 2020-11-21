@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { AuthService } from '../auth/auth.service';
+import { LibraryService } from '../library/library.service';
 import { User } from '../shared/model/user.model';
 
 
@@ -15,7 +16,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   loggedIn = false;
   private _loggedUserSub: Subscription = null;
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private libraryService: LibraryService) { }
 
   ngOnInit(): void {
     this._loggedUserSub = this.authService.getLoggedUserObservable().subscribe(
@@ -27,6 +30,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogout(): void {
     this.authService.logout();
+    this.libraryService.clearPieces();
   }
 
   ngOnDestroy(): void {

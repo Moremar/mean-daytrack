@@ -17,7 +17,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
     // set authentication token in header
     const token = this.authService.getAuthToken() ? this.authService.getAuthToken() : '';
-    console.log('Adding token "' + token + '" to the outgoing HTTP request');
+    if (token.length > 0) {
+      console.log('DEBUG - Adding auth token to the outgoing HTTP request');
+    } else {
+      console.log('WARN  - No auth token found to attach to the outgoing HTTP request');
+    }
 
     const updatedReq = req.clone({
       headers: req.headers.set('Authorization', token)
@@ -25,5 +29,4 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(updatedReq);
   }
-
 }

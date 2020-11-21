@@ -100,7 +100,9 @@ export class Piece {
   //  - the Date is converted into a date string YYYYMMDD
   toRestPiece(): RestPiece {
     // months start from index 0 in JS so we need the + 1
-    const completionDate = `${this.completionDate.getFullYear()}${this.completionDate.getMonth() + 1}${this.completionDate.getDate()}`;
+    const completionDate = `${this.completionDate.getFullYear()}`
+                         + `${this.completionDate.getMonth() + 1}`.padStart(2, '0')
+                         + `${this.completionDate.getDate()}`.padStart(2, '0');
     return new RestPiece(
       this.id, PieceType.toString(this.type), this.title, this.year, this.genre, this.imageUrl,
       this.summary, completionDate, this.author, this.director, this.actors, this.console, this.season, this.volume);

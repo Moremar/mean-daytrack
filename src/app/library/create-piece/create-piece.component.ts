@@ -98,8 +98,16 @@ export class CreatePieceComponent implements OnInit {
     const props = newPieceForm.form.value;
     let newPiece: Piece;
 
-    // completionDate is either a Moment (if selected in the date picker) or a Date (if populated from the backend)
-    const completionDate = props.completionDate instanceof Date ? props.completionDate : props.completionDate.toDate();
+    // completionDate is either :
+    // - null if no date was selected
+    // - a Moment if selected in the date picker
+    // - a Date if populated from the backend and not updated from the picker
+    let completionDate: Date = null;
+    if (props.completionDate instanceof Date) {
+      completionDate = props.completionDate;
+    } else if (moment.isMoment(props.completionDate)) {
+      completionDate = props.completionDate.toDate();
+    }
 
     // trim and filter actors list
     let actors = [];

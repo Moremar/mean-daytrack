@@ -16,6 +16,8 @@ export class LibraryComponent implements OnInit, OnDestroy {
   pieces: Piece[];
   piecesSub: Subscription = null;
 
+  private _firstFetch = true;
+
   // TODO add a pager to set these
   pageIndex = null;
   pageSize = null;
@@ -31,9 +33,10 @@ export class LibraryComponent implements OnInit, OnDestroy {
       (pieces: Piece[]) => {
         this.pieces = pieces;
         // intial fetch of the pieces from the backend
-        if (pieces.length === 0) {
+        if (pieces.length === 0 && this._firstFetch) {
           this.libraryService.fetchPieces(this.pageIndex, this.pageSize);
         }
+        this._firstFetch = false;
       }
     );
   }

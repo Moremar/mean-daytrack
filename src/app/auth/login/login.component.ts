@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../auth.service';
+import { LibraryService } from 'src/app/library/library.service';
 
 
 @Component({
@@ -18,7 +19,8 @@ export class LoginComponent implements OnInit {
   signupMode = false;
 
   constructor(private router: Router,
-              private authService: AuthService) { }
+              private authService: AuthService,
+              private libraryService: LibraryService) { }
 
 
   ngOnInit(): void {
@@ -45,6 +47,8 @@ export class LoginComponent implements OnInit {
         // the login was successful, an auth token should have been fetched
         this.loading = false;
         console.log('DEBUG - I will navigate to library !!');   // TODO remove
+        // must fetch to update the list of pieces in case a user logged out and logged in with another user
+        this.libraryService.fetchPieces(null, null);
         this.router.navigate(['library']);
       },
       (e: HttpErrorResponse) => {

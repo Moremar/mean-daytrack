@@ -22,6 +22,10 @@ export class LibraryService {
   constructor(private http: HttpClient) {
   }
 
+  // called on logout to not keep the pieces in memory
+  clearPieces(): void {
+    this._piecesSubject.next([]);
+  }
 
   // expose the pieces as a read-only observable (so the pieces list is modified only by the service)
   getPiecesObservable(): Observable<Piece[]> {

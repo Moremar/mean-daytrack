@@ -43,8 +43,9 @@ app.use(bodyParser.json());
 
 
 // first custom middleware to apply some common headers
-app.use((_request, response, next) => {
-    console.log('Middleware: Init');
+app.use((request, response, next) => {
+    console.log('Middleware [init] ' + request.originalUrl);
+
     // All responses will be on JSON format
     response.setHeader('Content-Type', 'application/json');
     // CORS header to allow Cross Origin Resource Sharing (when backend and frontend run on different ports)

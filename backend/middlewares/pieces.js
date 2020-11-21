@@ -14,8 +14,10 @@ const httpCodes = require('../http-codes');
 
 // middleware to get all pieces (no authentication required)
 exports.getPieces = (request, response, _next) => {
-    console.log('Middleware [GetPieces] ' + request.originalUrl);
-    const mongoQuery = Piece.find();
+    const userId = request.auth.userId;
+    console.log(`Middleware [getPieces] ${request.originalUrl}  (userId: ${userId})`);
+
+    const mongoQuery = Piece.find({ userId: userId });
 
     // Use query parameters for pagination
     const pageIndex = +request.query.pageIndex;
@@ -55,16 +57,17 @@ exports.getPieces = (request, response, _next) => {
 // middleware to get a single piece
 exports.getPiece = (request, response, _next) => {
     const pieceId = request.params.id;
-    console.log('Middleware [getPiece] ' + request.originalUrl);
+    const userId = request.auth.userId;
+    console.log(`Middleware [getPiece] ${request.originalUrl}  (userId: ${userId})`);
+
     // get the piece from MongoDB
-    Piece.findOne({ _id: pieceId })
+    Piece.findOne({ _id: pieceId, userId: userId })
         .then(
             (piece) => {
-                // piece must exist
                 if (!piece) {
                     return response.status(httpCodes.NOT_FOUND).json({
                         errorType: "Not found",
-                        errorMessage: 'No piece was found with ID = ' + pieceId
+                        errorMessage: `No piece was found with ID = ${pieceId} for user ${userId}`
                     });
                 }
                 response.status(httpCodes.SUCCESS).json({
@@ -94,15 +97,11 @@ exports.getPiece = (request, response, _next) => {
 
 // middleware for the piece creation
 exports.createPiece = (request, response, _next) => {
-    console.log('Middleware [createPiece] ' + request.originalUrl);
-    console.log(request.body);
+    const userId = request.auth.userId;
+    console.log(`Middleware [createPiece] ${request.originalUrl}  (userId: ${userId})`);
 
     const piece = new Piece({
-        // TODO add the user to the piece object
-        // take user info from the decoded token (so it can not be altered)
-        // userId: request.auth.userId,
-        // username: request.auth.username,
-        // take piece info from the request
+        userId: userId,
         type: request.body.type,
         title: request.body.title,
         year: request.body.year,
@@ -144,30 +143,22 @@ exports.createPiece = (request, response, _next) => {
 // // middleware to edit a piece
 exports.editPiece = (request, response, _next) => {
     const pieceId = request.params.id;
-    console.log('Middleware [editPiece] ' + request.originalUrl);
+    const userId = request.auth.userId;
+    console.log(`Middleware [editPiece] ${request.originalUrl}  (userId: ${userId})`);
     console.log(request.body);
 
     // check that the piece exists and is owned by the authenticated user
-    Piece.findOne({ _id: pieceId }).then(
+    Piece.findOne({ _id: pieceId, userId: userId }).then(
         (piece) => {
-            // piece must exist
             if (!piece) {
                 return response.status(httpCodes.NOT_FOUND).json({
                     errorType: "Not found",
-                    errorMessage: 'No piece was found with ID = ' + pieceId
+                    errorMessage: `No piece was found with ID = ${pieceId} for user ${userId}`
                 });
             }
-            // piece must belong to authenticated user
-            // if (piece.userId != request.auth.userId) {
-            //    return response.status(UNAUTHORIZED_CODE).json({
-            //        error: "PermissionError",
-            //        message: 'Piece with ID ' + pieceId + ' belongs to another user.',
-            //        id: null
-            //    });
-            // }
 
             // update a piece in MongoDB
-            Piece.findOneAndUpdate({ _id: pieceId }, {
+            Piece.findOneAndUpdate({ _id: pieceId, userId: userId }, {
                     // the user info are not editable
                     type: request.body.type,
                     title: request.body.title,
@@ -196,29 +187,21 @@ exports.editPiece = (request, response, _next) => {
 // middleware to delete a piece
 exports.deletePiece = (request, response, _next) => {
     const pieceId = request.params.id;
-    console.log('Middleware [deletePiece] ' + request.originalUrl);
+    const userId = request.auth.userId;
+    console.log(`Middleware [deletePiece] ${request.originalUrl}  (userId: ${userId})`);
 
-    Piece.findOne({ _id: pieceId })
+    Piece.findOne({ _id: pieceId, userId: userId })
         .then(
             (piece) => {
-                // piece must exist
                 if (!piece) {
                     return response.status(httpCodes.NOT_FOUND).json({
                         errorType: "Not Found",
-                        errorMessage: 'No piece was found with ID = ' + pieceId
+                        errorMessage: `No piece was found with ID = ${pieceId} for user ${userId}`
                     });
                 }
-                // piece must belong to authenticated user
-                // if (piece.userId != request.auth.userId) {
-                //    return response.status(UNAUTHORIZED_CODE).json({
-                //        error: "PermissionError",
-                //        message: 'Piece with ID ' + pieceId + ' belongs to another user.',
-                //        id: null
-                //    });
-                // }
 
                 // perform deletion
-                return Piece.findOneAndRemove({ _id: pieceId });
+                return Piece.findOneAndRemove({ _id: pieceId, userId: userId });
             }
         ).then(
             (deletedPiece) => {

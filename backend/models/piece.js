@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-// TODO link each piece to a user
 
 // definition of the Piece schema in MongoDB
-// we do not define the ID field because Moongoose automatically creates an _id field.
+// we do not define the piece ID field because Moongoose automatically creates an _id field.
 const pieceSchema = mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     type: { type: String, required: true },
     title: { type: String, required: true },
     year: { type: Number, required: false },
