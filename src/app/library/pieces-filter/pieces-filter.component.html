@@ -6,4 +6,21 @@
             <input type="search" matInput (keyup)="onKeyUp($event)">
         </mat-form-field>
     </div>
+    <div class="centered">
+        <div [class]="'icon-wrapper'" [class.selected]="bookSelected" (click)="onTypeClick('Book')">
+            <img class="piece-type-icon" src="../../../assets/images/book.svg" alt="Not found" />
+        </div>
+        <div [class]="'icon-wrapper'" [class.selected]="comicSelected" (click)="onTypeClick('Comic')">
+            <img class="piece-type-icon" src="../../../assets/images/comic.svg" alt="Not found" />
+        </div>
+        <div [class]="'icon-wrapper'" [class.selected]="movieSelected" (click)="onTypeClick('Movie')">
+            <img class="piece-type-icon" src="../../../assets/images/movie.svg" alt="Not found" />
+        </div>
+        <div [class]="'icon-wrapper'" [class.selected]="seriesSelected" (click)="onTypeClick('Series')">
+            <img class="piece-type-icon" src="../../../assets/images/series.svg" alt="Not found" />
+        </div>
+        <div [class]="'icon-wrapper'" [class.selected]="gameSelected" (click)="onTypeClick('Game')">
+            <img class="piece-type-icon" src="../../../assets/images/game.svg" alt="Not found" />
+        </div>
+    </div>
 </div>

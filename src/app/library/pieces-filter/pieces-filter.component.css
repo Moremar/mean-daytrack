@@ -16,5 +16,29 @@ img.search-icon {
 }
 
 mat-form-field {
-    width: 400px;
+    width: 200px;
+}
+
+.icon-wrapper {
+    margin-left: 5px;
+    display: inline-block;
+    height: 25px;
+    padding: 5px;
+    border-radius: 5px;
+    /* transparent 1px border so it does not glitch on hover/selected when we add a 1px border */
+    border: 1px solid transparent;
+}
+
+.icon-wrapper:hover {
+    border: 1px solid grey;
+}
+
+.selected {
+    border: 1px solid grey;
+    background-color: #eee;
+}
+
+img.piece-type-icon {
+    height: 25px;
+    vertical-align: middle;
 }

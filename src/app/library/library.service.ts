@@ -8,6 +8,7 @@ import { Piece } from './model/piece.model';
 import { RestGetPiecesResponse, RestGetPieceResponse, RestPutPieceResponse,
          RestPostPieceResponse, RestDeletePieceResponse } from './model/rest-pieces.model';
 import { PieceFilter } from './model/piece-filter.model';
+import { PieceType } from './model/piece-type.enum';
 
 
 const PIECES_URL = environment.backendUrl + '/pieces';
@@ -19,8 +20,7 @@ export class LibraryService {
 
   private _allPieces: Piece[] = [];
   private _filteredPiecesSubject = new BehaviorSubject<Piece[]>([]);
-
-  private pieceFilter = new PieceFilter(null);
+  private _pieceFilter = new PieceFilter();
 
   constructor(private http: HttpClient) {
   }
@@ -29,6 +29,7 @@ export class LibraryService {
   clearPieces(): void {
     this._allPieces = [];
     this._filteredPiecesSubject.next([]);
+    this._pieceFilter = new PieceFilter();
   }
 
   // expose the pieces as a read-only observable (so the pieces list is modified only by the service)
@@ -124,13 +125,18 @@ export class LibraryService {
     );
   }
 
-  setFilter(textFilter: string) {
-    this.pieceFilter = new PieceFilter(textFilter);
+  updateTextFilter(textFilter: string): void {
+    this._pieceFilter.setTextFilter(textFilter);
     this.updateFilteredPieces();
   }
 
-  updateFilteredPieces() {
-    let filtered: Piece[] = this._allPieces.filter( x => this.pieceFilter.accept(x) );
+  updateTypeFilter(pieceType: PieceType): void {
+    this._pieceFilter.setPieceTypeFilter(pieceType);
+    this.updateFilteredPieces();
+  }
+
+  updateFilteredPieces(): void {
+    const filtered: Piece[] = this._allPieces.filter( x => this._pieceFilter.accept(x) );
     this._filteredPiecesSubject.next(filtered);
   }
 }
