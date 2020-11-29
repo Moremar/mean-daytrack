@@ -42,7 +42,7 @@ export class LibraryComponent implements OnInit, OnDestroy {
     );
   }
 
-  downloadAsJson(): void {
+  exportToJson(): void {
     console.log('DEBUG - Exporting pieces as JSON');
     const fileContent = this.libraryService.getPiecesAsJson();
     const blob = new Blob([fileContent], { type: 'application/json' });

@@ -1,0 +1,54 @@
+mat-card {
+    display: table;
+    margin: auto;
+    margin: 30px auto;
+    width: 600px;
+    padding: 20px;
+}
+
+.errorMessage {
+    background-color: #fdd;
+    border: #a00 1px solid;
+    color: #a00;
+    min-width: 500px;
+}
+
+.successMessage {
+    background-color: #d4edda;
+    border: #1C5723 1px solid;
+    color: #1C5723;
+    min-width: 500px;
+}
+
+
+/*
+ * Hide the default file picker (that has no Material style)
+ * When the custom "Select" button is clicked, we simulate a click on this file picker
+ */
+
+input[type="file"] {
+    visibility: hidden;
+    width: 1px;
+}
+
+.invalidFileError {
+    /* mimic the style of the mat-error (not usable here since no actual matInput) */
+    font-size: 75%;
+    color: #a00;
+    font-weight: 400;
+    padding-left: 10px;
+    padding-top: 5px;
+    line-height: 1.125;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+#select-button {
+    line-height: 25px;
+    margin-right: 20px;
+}
+
+#import-button {
+    display: table;
+    margin: auto;
+    margin-top: 20px;
+}

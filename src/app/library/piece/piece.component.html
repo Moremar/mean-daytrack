@@ -14,17 +14,17 @@
             <span *ngIf="piece.year != null">({{piece.year}})</span>
         </mat-panel-description>
         <div class="right">
-                <div class="completion-date">{{getCompletionDate()}}</div>
-                <div class="edit-icon" (click)="onEdit($event)">
-                    <img class="action-icon" src="../../../assets/images/edit.svg" alt="Not found" />
-                </div>
-                <div class="delete-icon" (click)="onDelete($event)">
-                    <img class="action-icon" src="../../../assets/images/delete.svg" alt="Not found" />
-                </div>
+            <div class="completion-date">{{getCompletionDate()}}</div>
+            <div class="edit-icon" (click)="onEdit($event)">
+                <img class="action-icon" src="../../../assets/images/edit.svg" alt="Not found" />
             </div>
+            <div class="delete-icon" (click)="onDelete($event)">
+                <img class="action-icon" src="../../../assets/images/delete.svg" alt="Not found" />
+            </div>
+        </div>
     </mat-expansion-panel-header>
     <div>
-        <img *ngIf="piece.imageUrl != ''" class="piece-image" src="{{piece.imageUrl}}" alt="Not found" />
+        <img *ngIf="piece.imageUrl" class="piece-image" src="{{piece.imageUrl}}" alt="Not found" />
         <p>
             <i>{{piece.genre}}</i>
         </p>

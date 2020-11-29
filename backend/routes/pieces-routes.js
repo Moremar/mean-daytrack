@@ -34,6 +34,11 @@ router.post('/',
     verifyAuth,
     PiecesController.createPiece);
 
+// middleware to import multiple pieces from a JSON backup file
+router.put('/',
+    verifyAuth,
+    PiecesController.importPieces);
+
 // middleware to edit a piece
 router.put('/:id',
     verifyAuth,

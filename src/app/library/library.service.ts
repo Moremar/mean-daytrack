@@ -5,11 +5,12 @@ import { map } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { Piece } from './model/piece.model';
-import { RestGetPiecesResponse, RestGetPieceResponse, RestPutPieceResponse,
-         RestPostPieceResponse, RestDeletePieceResponse } from './model/rest-pieces.model';
+import { RestGetPiecesResponse, RestGetPieceResponse, RestPutPiecesResponse, RestPutPieceResponse,
+         RestPostPieceResponse, RestDeletePieceResponse, RestPiece } from './model/rest-pieces.model';
 import { PieceFilter } from './model/piece-filter.model';
 import { PieceType } from './model/piece-type.enum';
 import { PieceExporter } from './model/piece-exporter.model';
+import { PieceImporter } from './model/piece-importer.model';
 
 
 const PIECES_URL = environment.backendUrl + '/pieces';
@@ -89,6 +90,22 @@ export class LibraryService {
     );
   }
 
+  // Pieces import
+  importPieces(pieces: Piece[]): Observable<Piece[]> {
+    console.log('Importing pieces from JSON file.');
+
+    const restPieces: RestPiece[] = pieces.map(x => x.toRestPiece());
+
+    return this.http.put(PIECES_URL, { pieces: restPieces }).pipe(
+      map( (httpResponse: RestPutPiecesResponse) => {
+        console.log('Received response from PUT ' + PIECES_URL);
+        console.log(httpResponse);
+        return httpResponse.pieces.map(x => Piece.fromRestPiece(x));
+      })
+    );
+  }
+
+
   // Piece edition
   updatePiece(newPiece: Piece): Observable<Piece> {
     console.log(`Editing existing piece ${newPiece.pretty()}`);
@@ -145,5 +162,11 @@ export class LibraryService {
     const pieces = this._filteredPiecesSubject.getValue();
     const exporter = new PieceExporter();
     return exporter.export(pieces);
+  }
+
+  importPiecesFromJson(json: string): Observable<Piece[]> {
+    const importer = new PieceImporter();
+    const piecesToImport = importer.import(json);
+    return this.importPieces(piecesToImport);
   }
 }

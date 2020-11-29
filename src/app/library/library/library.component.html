@@ -1,4 +1,4 @@
-<button mat-button color="primary" id="export-button" (click)="downloadAsJson()">Export</button>
+<button mat-button color="primary" id="export-button" (click)="exportToJson()">Export</button>
 <app-pieces-filter></app-pieces-filter>
 <div class="container">
     <app-piece *ngFor="let piece of pieces" [piece]="piece"></app-piece>

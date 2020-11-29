@@ -1,0 +1,22 @@
+<mat-card class="successMessage" *ngIf="!loading && successMessage">
+    <p>{{successMessage}}</p>
+</mat-card>
+
+<mat-card class="errorMessage" *ngIf="!loading && errorMessage">
+    <p>{{errorMessage}}</p>
+</mat-card>
+
+<mat-card>
+    <p>Select a JSON backup file to import :</p>
+    <form (submit)="onImport()" [formGroup]="importForm">
+        <!-- JSON pieces file -->
+        <div class="uploadFileDiv">
+            <!-- Angular does not support file input, so use a hidden file picker, and click it manually -->
+            <button id="select-button" mat-stroked-button type="button" (click)="filePicker.click()">Select</button>
+            <input type="file" #filePicker (change)="onFileSelected($event)" />
+            <span><i>{{fileName}}</i></span>
+            <div class="invalidFileError" *ngIf="mustValidate && importForm.controls.jsonFile.invalid">A JSON file must be selected.</div>
+        </div>
+        <button id="import-button" mat-flat-button color="primary" type="submit">Start import</button>
+    </form>
+</mat-card>

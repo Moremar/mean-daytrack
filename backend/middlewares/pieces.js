@@ -95,6 +95,71 @@ exports.getPiece = (request, response, _next) => {
 };
 
 
+// middleware to import multiple pieces
+// pieces with an existing ID will be updated, pieces with no ID or an ID that does not exist
+// will be created with a new ID
+// there are a lot of DB operations to perform here (for each piece, check if it exists and update/create it)
+// so we use an async handler and await for each DB call
+// All operations are in a transactions so they can all be reverted if one fails.
+exports.importPieces = async(request, response, _next) => {
+    const userId = request.auth.userId;
+    console.log(`Middleware [importPieces] ${request.originalUrl}  (userId: ${userId})`);
+    const importedPieces = [];
+
+    const session = await Piece.startSession();
+    session.startTransaction();
+
+    try {
+        for (const piece of request.body.pieces) {
+            let dbPiece = await Piece.findOne({ _id: piece._id, userId: userId }, null, { session: session });
+            if (!dbPiece) {
+                // create mode
+                dbPiece = new Piece({ userId: userId });
+                dbPiece.$session(session);
+            }
+            dbPiece.type = piece.type;
+            dbPiece.title = piece.title;
+            dbPiece.year = piece.year;
+            dbPiece.genre = piece.genre;
+            dbPiece.imageUrl = piece.imageUrl;
+            dbPiece.summary = piece.summary;
+            dbPiece.completionDate = piece.completionDate;
+            dbPiece.author = piece.author;
+            dbPiece.director = piece.director;
+            dbPiece.actors = piece.actors;
+            dbPiece.console = piece.console;
+            dbPiece.season = piece.season;
+            dbPiece.volume = piece.volume;
+            const importedPiece = await dbPiece.save();
+            importedPieces.push(importedPiece);
+        }
+        await session.commitTransaction();
+        session.endSession();
+        return response.status(httpCodes.SUCCESS).json({
+            message: "Pieces imported successfully",
+            pieces: importedPieces
+        });
+    } catch (e) {
+        await session.abortTransaction();
+        session.endSession();
+
+        if (e instanceof mongoose.Error.CastError) {
+            // the provided pieceId has an invalid format
+            return response.status(httpCodes.BAD_REQUEST).json({
+                errorType: "Invalid ID",
+                errorMessage: "Failed to cast the ID " + e.value + " into " + e.kind
+            });
+        }
+        // Generic error handler for unexpected errors
+        console.log(e);
+        return response.status(httpCodes.SERVER_ERROR).json({
+            errorType: 'Server error',
+            errorMessage: "Failed to import the pieces to the server"
+        });
+    }
+};
+
+
 // middleware for the piece creation
 exports.createPiece = (request, response, _next) => {
     const userId = request.auth.userId;

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -24,6 +24,7 @@ import { CreatePieceComponent } from './library/create-piece/create-piece.compon
 import { PieceComponent } from './library/piece/piece.component';
 import { PieceDeletionDialogComponent } from './library/piece/piece-deletion-dialog/piece-deletion-dialog.component';
 import { PiecesFilterComponent } from './library/pieces-filter/pieces-filter.component';
+import { ImportPiecesComponent } from './library/import-pieces/import-pieces.component';
 
 @NgModule({
   declarations: [
@@ -34,12 +35,14 @@ import { PiecesFilterComponent } from './library/pieces-filter/pieces-filter.com
     CreatePieceComponent,
     PieceComponent,
     PieceDeletionDialogComponent,
-    PiecesFilterComponent
+    PiecesFilterComponent,
+    ImportPiecesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
     /* TODO move Material imports to a dedicated module */

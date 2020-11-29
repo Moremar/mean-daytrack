@@ -23,6 +23,27 @@ export class Piece {
     public volume: number,         // Comic only
 ) {}
 
+static fromJson(json: any): Piece {
+  // Create a RestPiece and use it to generate the Piece
+  const restPiece = new RestPiece(
+    json.id,
+    json.type,
+    json.title,
+    json.year,
+    json.genre,
+    json.imageUrl,
+    json.summary,
+    json.completionDate,
+    json.author,
+    json.director,
+    json.actors,
+    json.console,
+    json.season,
+    json.volume
+  );
+  return Piece.fromRestPiece(restPiece);
+}
+
   static createBook(
       id: string, title: string, year: number, genre: string, imageUrl: string,
       summary: string, completionDate: Date, author: string): Piece {
@@ -122,22 +143,22 @@ export class Piece {
 
     const lines: string[] = [];
     lines.push('{');
-    lines.push(`    id: "${this.id}",`);
-    lines.push(`    type: "${PieceType.toString(this.type)}",`);
-    lines.push(`    title: "${this.title}",`);
+    lines.push(`    "id": "${this.id}",`);
+    lines.push(`    "type": "${PieceType.toString(this.type)}",`);
+    lines.push(`    "title": "${this.title}",`);
 
-    if (this.year)     { lines.push(`    year: ${this.year},`);           }
-    if (this.genre)    { lines.push(`    genre: "${this.genre}",`);       }
-    if (this.imageUrl) { lines.push(`    imageUrl: "${this.imageUrl}",`); }
-    if (this.summary)  { lines.push(`    summary: "${this.summary}",`);   }
-    if (this.author)   { lines.push(`    author: "${this.author}",`);     }
-    if (this.director) { lines.push(`    director: "${this.director}",`); }
-    if (actors)        { lines.push(`    actors: ${actors},`);            }
-    if (this.console)  { lines.push(`    console: "${this.console}",`);   }
-    if (this.season)   { lines.push(`    season: ${this.season},`);       }
-    if (this.volume)   { lines.push(`    season: ${this.volume},`);       }
+    if (this.year)     { lines.push(`    "year": ${this.year},`);           }
+    if (this.genre)    { lines.push(`    "genre": "${this.genre}",`);       }
+    if (this.imageUrl) { lines.push(`    "imageUrl": "${this.imageUrl}",`); }
+    if (this.summary)  { lines.push(`    "summary": "${this.summary}",`);   }
+    if (this.author)   { lines.push(`    "author": "${this.author}",`);     }
+    if (this.director) { lines.push(`    "director": "${this.director}",`); }
+    if (actors)        { lines.push(`    "actors": ${actors},`);            }
+    if (this.console)  { lines.push(`    "console": "${this.console}",`);   }
+    if (this.season)   { lines.push(`    "season": ${this.season},`);       }
+    if (this.volume)   { lines.push(`    "season": ${this.volume},`);       }
 
-    lines.push(`    completionDate: "${completionDate}"`);
+    lines.push(`    "completionDate": "${completionDate}"`);
     lines.push('}');
 
     return lines.join('\n');

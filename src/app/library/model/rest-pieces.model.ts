@@ -38,6 +38,12 @@ export interface RestPostPieceResponse {
 }
 
 // REST response from the backend on PUT /api/pieces/:id
+export interface RestPutPiecesResponse {
+  message: string;
+  pieces: RestPiece[];
+}
+
+// REST response from the backend on PUT /api/pieces/:id
 export interface RestPutPieceResponse {
   message: string;
   piece: RestPiece;
