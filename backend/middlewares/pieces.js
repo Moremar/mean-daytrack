@@ -17,7 +17,7 @@ exports.getPieces = (request, response, _next) => {
     const userId = request.auth.userId;
     console.log(`Middleware [getPieces] ${request.originalUrl}  (userId: ${userId})`);
 
-    const mongoQuery = Piece.find({ userId: userId });
+    const mongoQuery = Piece.find({ userId: userId }).sort({ completionDate: -1 });
 
     // Use query parameters for pagination
     const pageIndex = +request.query.pageIndex;
