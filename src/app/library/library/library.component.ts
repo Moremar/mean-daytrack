@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LibraryService } from '../library.service';
 import { Piece } from '../model/piece.model';
+import { saveAs } from 'file-saver';
 
 
 // TODO Add a spinner on loading
@@ -41,6 +42,20 @@ export class LibraryComponent implements OnInit, OnDestroy {
     );
   }
 
+  downloadAsJson(): void {
+    console.log('DEBUG - Exporting pieces as JSON');
+    const fileContent = this.libraryService.getPiecesAsJson();
+    const blob = new Blob([fileContent], { type: 'application/json' });
+    const time = new Date();
+    const timestamp = `${time.getFullYear()}`
+                    + `${time.getMonth() + 1}`.padStart(2, '0')
+                    + `${time.getDate()}`.padStart(2, '0')
+                    + '-'
+                    + `${time.getHours()}`.padStart(2, '0')
+                    + `${time.getMinutes()}`.padStart(2, '0')
+                    + `${time.getSeconds()}`.padStart(2, '0');
+    saveAs(blob, `daytrack_backup_${timestamp}.json`);
+  }
 
   ngOnDestroy(): void {
     this.piecesSub.unsubscribe();

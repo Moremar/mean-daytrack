@@ -9,6 +9,7 @@ import { RestGetPiecesResponse, RestGetPieceResponse, RestPutPieceResponse,
          RestPostPieceResponse, RestDeletePieceResponse } from './model/rest-pieces.model';
 import { PieceFilter } from './model/piece-filter.model';
 import { PieceType } from './model/piece-type.enum';
+import { PieceExporter } from './model/piece-exporter.model';
 
 
 const PIECES_URL = environment.backendUrl + '/pieces';
@@ -138,5 +139,11 @@ export class LibraryService {
   updateFilteredPieces(): void {
     const filtered: Piece[] = this._allPieces.filter( x => this._pieceFilter.accept(x) );
     this._filteredPiecesSubject.next(filtered);
+  }
+
+  getPiecesAsJson(): string {
+    const pieces = this._filteredPiecesSubject.getValue();
+    const exporter = new PieceExporter();
+    return exporter.export(pieces);
   }
 }

@@ -113,4 +113,33 @@ export class Piece {
     return `${PieceType.toString(this.type)}(${this.id}, ${this.title}, ${this.year}, ${this.genre}, ${this.imageUrl}, `
     + `${this.summary}, ${this.completionDate}, ${this.author}, ${this.director}, ${actors}, ${this.console}, ${this.season}, ${this.volume})`;
   }
+
+  toJsonString(): string {
+    const actors = this.actors ? '["' + this.actors.join('", "') + '"]' : null;
+    const completionDate = `${this.completionDate.getFullYear()}`
+    + `${this.completionDate.getMonth() + 1}`.padStart(2, '0')
+    + `${this.completionDate.getDate()}`.padStart(2, '0');
+
+    const lines: string[] = [];
+    lines.push('{');
+    lines.push(`    id: "${this.id}",`);
+    lines.push(`    type: "${PieceType.toString(this.type)}",`);
+    lines.push(`    title: "${this.title}",`);
+
+    if (this.year)     { lines.push(`    year: ${this.year},`);           }
+    if (this.genre)    { lines.push(`    genre: "${this.genre}",`);       }
+    if (this.imageUrl) { lines.push(`    imageUrl: "${this.imageUrl}",`); }
+    if (this.summary)  { lines.push(`    summary: "${this.summary}",`);   }
+    if (this.author)   { lines.push(`    author: "${this.author}",`);     }
+    if (this.director) { lines.push(`    director: "${this.director}",`); }
+    if (actors)        { lines.push(`    actors: ${actors},`);            }
+    if (this.console)  { lines.push(`    console: "${this.console}",`);   }
+    if (this.season)   { lines.push(`    season: ${this.season},`);       }
+    if (this.volume)   { lines.push(`    season: ${this.volume},`);       }
+
+    lines.push(`    completionDate: "${completionDate}"`);
+    lines.push('}');
+
+    return lines.join('\n');
+  }
 }
