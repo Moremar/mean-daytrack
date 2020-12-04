@@ -27,6 +27,7 @@ mat-form-field {
     border-radius: 5px;
     /* transparent 1px border so it does not glitch on hover/selected when we add a 1px border */
     border: 1px solid transparent;
+    position: relative;
 }
 
 .icon-wrapper:hover {
@@ -41,4 +42,22 @@ mat-form-field {
 img.piece-type-icon {
     height: 25px;
     vertical-align: middle;
+}
+
+.tooltip {
+    visibility: hidden;
+    color: #844ee2;
+    text-align: center;
+    font-size: x-small;
+    /* Position the tooltip centered below the container */
+    position: absolute;
+    z-index: 1;
+    top: 110%;
+    left: 50%;
+    width: 60px;
+    margin-left: -30px;
+}
+
+.icon-wrapper:hover .tooltip {
+    visibility: visible;
 }
