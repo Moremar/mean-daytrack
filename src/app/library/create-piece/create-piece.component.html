@@ -61,14 +61,16 @@
             </mat-form-field>
         </div>
 
-        <!-- Completed on -->
+        <!-- Completed on / in wishlist -->
         <div>
             <mat-form-field class="noblock">
                 <mat-label>{{ itemType === 'Game' ? 'Completed on' : 'Read on' }}</mat-label>
-                <input matInput [matDatepicker]="picker" name="completionDate" [(ngModel)]="today" #completionDate="ngModel">
+                <input [disabled]="disableCompletedDatePicker" matInput [matDatepicker]="picker" name="completionDate" [(ngModel)]="today" #completionDate="ngModel">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
+
+            <mat-checkbox matInput color="primary" name="wishlist" [(checked)]="inWishlist" (change)="onWishlistToggled(wishlistCheckbox)" #wishlistCheckbox>Add to wishlist</mat-checkbox>
         </div>
 
         <!-- Author -->

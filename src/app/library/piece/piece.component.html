@@ -15,6 +15,9 @@
         </mat-panel-description>
         <div class="right">
             <div class="completion-date">{{getCompletionDate()}}</div>
+            <div class="wishlist-icon" *ngIf="piece.wishlist">
+                <img class="action-icon" src="../../../assets/images/star.svg" alt="Not found" />
+            </div>
             <div class="edit-icon" (click)="onEdit($event)">
                 <img class="action-icon" src="../../../assets/images/edit.svg" alt="Not found" />
             </div>

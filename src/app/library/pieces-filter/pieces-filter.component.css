@@ -30,13 +30,18 @@ mat-form-field {
     position: relative;
 }
 
+.icon-wrapper.wishlist {
+    /* separate a bit the wishlist filter from piece type filters */
+    margin-left: 15px;
+}
+
 .icon-wrapper:hover {
-    border: 1px solid grey;
+    border: 1px solid #844ee2;
 }
 
 .selected {
-    border: 1px solid grey;
-    background-color: #eee;
+    border-color: #844ee2;
+    background-color: #f5f0ff;
 }
 
 img.piece-type-icon {

@@ -13,6 +13,10 @@ mat-form-field.noblock {
     width: 120px;
 }
 
+mat-checkbox {
+    margin-left: 50px;
+}
+
 button {
     display: table;
     margin: auto;

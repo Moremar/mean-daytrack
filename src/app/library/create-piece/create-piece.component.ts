@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 
@@ -26,6 +27,12 @@ export class CreatePieceComponent implements OnInit {
   editionMode = false;
   editedPiece: Piece = null;
 
+  // these 2 fields are always equal, but both seem to be needed :
+  // - inWishlist is double-bound to the checkbox
+  // - when the checkbox changes it updates disableCompletedDatePicker that is bound to the picker
+  disableCompletedDatePicker = false;
+  inWishlist = false;
+
   @ViewChild('pieceForm') pieceForm: NgForm;
 
   constructor(private libraryService: LibraryService,
@@ -49,6 +56,9 @@ export class CreatePieceComponent implements OnInit {
 
             setTimeout(() => {
             // pre-populate the form with the edited piece
+            this.inWishlist = this.editedPiece.completionDate ? false : true;
+            this.disableCompletedDatePicker = this.inWishlist;
+
             let initialValue: any = {
               // common fields
               type: PieceType.toString(this.editedPiece.type),
@@ -89,6 +99,13 @@ export class CreatePieceComponent implements OnInit {
   }
 
 
+  // When the wishlist is ticked, disable the completion date picker
+  onWishlistToggled(checkbox: MatCheckbox): void {
+    this.inWishlist = checkbox.checked;
+    this.disableCompletedDatePicker = this.inWishlist;
+  }
+
+
   onSubmit(newPieceForm: NgForm): void {
     if (newPieceForm.invalid) {
       // the error will be shown by the validation
@@ -103,10 +120,12 @@ export class CreatePieceComponent implements OnInit {
     // - a Moment if selected in the date picker
     // - a Date if populated from the backend and not updated from the picker
     let completionDate: Date = null;
-    if (props.completionDate instanceof Date) {
-      completionDate = props.completionDate;
-    } else if (moment.isMoment(props.completionDate)) {
-      completionDate = props.completionDate.toDate();
+    if (!this.inWishlist) {
+      if (props.completionDate instanceof Date) {
+        completionDate = props.completionDate;
+      } else if (moment.isMoment(props.completionDate)) {
+        completionDate = props.completionDate.toDate();
+      }
     }
 
     // trim and filter actors list

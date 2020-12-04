@@ -6,6 +6,10 @@ import { RestPiece } from './rest-pieces.model';
 
 export class Piece {
 
+  // a piece is either completed or in the wishlist (pending completion)
+  // this prop is just a convenient way to avoid checking nullity of completionDate
+ public wishlist = false;
+
   private constructor(
     public id: string,
     public type: PieceType,
@@ -21,7 +25,11 @@ export class Piece {
     public console: string,        // Game only
     public season: number,         // Series only
     public volume: number,         // Comic only
-) {}
+) {
+ if (!completionDate) {
+   this.wishlist = true;
+ }
+}
 
 static fromJson(json: any): Piece {
   // Create a RestPiece and use it to generate the Piece
@@ -88,7 +96,7 @@ static fromJson(json: any): Piece {
   static fromRestPiece(restPiece: RestPiece): Piece {
     // if a date string is provided, convert it to a Date
     let completionDate = null;
-    if (restPiece.completionDate !== null) {
+    if (restPiece.completionDate) {
       const pattern = /^(\d{4})(\d{2})(\d{2})$/;
       const arrayDate = restPiece.completionDate.match(pattern);
       // months start from index 0 in JS so we need the -1
@@ -120,10 +128,13 @@ static fromJson(json: any): Piece {
   //  - the piece type enum is converted into a string
   //  - the Date is converted into a date string YYYYMMDD
   toRestPiece(): RestPiece {
-    // months start from index 0 in JS so we need the + 1
-    const completionDate = `${this.completionDate.getFullYear()}`
-                         + `${this.completionDate.getMonth() + 1}`.padStart(2, '0')
-                         + `${this.completionDate.getDate()}`.padStart(2, '0');
+    let completionDate = null;
+    if (this.completionDate) {
+      // months start from index 0 in JS so we need the + 1
+      completionDate = `${this.completionDate.getFullYear()}`
+                     + `${this.completionDate.getMonth() + 1}`.padStart(2, '0')
+                     + `${this.completionDate.getDate()}`.padStart(2, '0');
+    }
     return new RestPiece(
       this.id, PieceType.toString(this.type), this.title, this.year, this.genre, this.imageUrl,
       this.summary, completionDate, this.author, this.director, this.actors, this.console, this.season, this.volume);
@@ -135,30 +146,37 @@ static fromJson(json: any): Piece {
     + `${this.summary}, ${this.completionDate}, ${this.author}, ${this.director}, ${actors}, ${this.console}, ${this.season}, ${this.volume})`;
   }
 
+  esc(str: string): string {
+    return str.split('"').join('\\"');
+  }
+
   toJsonString(): string {
     const actors = this.actors ? '["' + this.actors.join('", "') + '"]' : null;
-    const completionDate = `${this.completionDate.getFullYear()}`
-    + `${this.completionDate.getMonth() + 1}`.padStart(2, '0')
-    + `${this.completionDate.getDate()}`.padStart(2, '0');
+    let completionDate = '';
+    if (this.completionDate) {
+      completionDate = `${this.completionDate.getFullYear()}`
+      + `${this.completionDate.getMonth() + 1}`.padStart(2, '0')
+      + `${this.completionDate.getDate()}`.padStart(2, '0');
+    }
 
     const lines: string[] = [];
     lines.push('{');
-    lines.push(`    "id": "${this.id}",`);
     lines.push(`    "type": "${PieceType.toString(this.type)}",`);
     lines.push(`    "title": "${this.title}",`);
 
-    if (this.year)     { lines.push(`    "year": ${this.year},`);           }
-    if (this.genre)    { lines.push(`    "genre": "${this.genre}",`);       }
-    if (this.imageUrl) { lines.push(`    "imageUrl": "${this.imageUrl}",`); }
-    if (this.summary)  { lines.push(`    "summary": "${this.summary}",`);   }
-    if (this.author)   { lines.push(`    "author": "${this.author}",`);     }
-    if (this.director) { lines.push(`    "director": "${this.director}",`); }
-    if (actors)        { lines.push(`    "actors": ${actors},`);            }
-    if (this.console)  { lines.push(`    "console": "${this.console}",`);   }
-    if (this.season)   { lines.push(`    "season": ${this.season},`);       }
-    if (this.volume)   { lines.push(`    "season": ${this.volume},`);       }
+    if (this.year)           { lines.push(`    "year": ${this.year},`);                     }
+    if (this.genre)          { lines.push(`    "genre": "${this.genre}",`);                 }
+    if (this.imageUrl)       { lines.push(`    "imageUrl": "${this.imageUrl}",`);           }
+    if (this.summary)        { lines.push(`    "summary": "${this.esc(this.summary)}",`);   }
+    if (this.author)         { lines.push(`    "author": "${this.esc(this.author)}",`);     }
+    if (this.director)       { lines.push(`    "director": "${this.esc(this.director)}",`); }
+    if (actors)              { lines.push(`    "actors": ${actors},`);                      }
+    if (this.console)        { lines.push(`    "console": "${this.console}",`);             }
+    if (this.season)         { lines.push(`    "season": ${this.season},`);                 }
+    if (this.volume)         { lines.push(`    "volume": ${this.volume},`);                 }
+    if (this.completionDate) { lines.push(`    "completionDate": "${completionDate}",`);    }
 
-    lines.push(`    "completionDate": "${completionDate}"`);
+    lines.push(`    "id": "${this.id}"`);  // ID at the end with no comma (we are sure it is there)
     lines.push('}');
 
     return lines.join('\n');

@@ -27,5 +27,9 @@
             <img class="piece-type-icon" src="../../../assets/images/game.svg" alt="Not found" />
             <span class="tooltip">Games</span>
         </div>
+        <div [class]="'icon-wrapper'" [class.wishlist]="true" [class.selected]="wishlistSelected" (click)="onWishlistClick()">
+            <img class="piece-type-icon" src="../../../assets/images/star.svg" alt="Not found" />
+            <span class="tooltip">Wishlist</span>
+        </div>
     </div>
 </div>

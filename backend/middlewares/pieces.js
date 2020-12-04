@@ -119,17 +119,17 @@ exports.importPieces = async(request, response, _next) => {
             }
             dbPiece.type = piece.type;
             dbPiece.title = piece.title;
-            dbPiece.year = piece.year;
-            dbPiece.genre = piece.genre;
-            dbPiece.imageUrl = piece.imageUrl;
-            dbPiece.summary = piece.summary;
-            dbPiece.completionDate = piece.completionDate;
-            dbPiece.author = piece.author;
-            dbPiece.director = piece.director;
-            dbPiece.actors = piece.actors;
-            dbPiece.console = piece.console;
-            dbPiece.season = piece.season;
-            dbPiece.volume = piece.volume;
+            dbPiece.year = piece.year || null;
+            dbPiece.genre = piece.genre || null;
+            dbPiece.imageUrl = piece.imageUrl || null;
+            dbPiece.summary = piece.summary || null;
+            dbPiece.completionDate = piece.completionDate || null;
+            dbPiece.author = piece.author || null;
+            dbPiece.director = piece.director || null;
+            dbPiece.actors = piece.actors || [];
+            dbPiece.console = piece.console || null;
+            dbPiece.season = piece.season || null;
+            dbPiece.volume = piece.volume || null;
             const importedPiece = await dbPiece.save();
             importedPieces.push(importedPiece);
         }
@@ -168,18 +168,18 @@ exports.createPiece = (request, response, _next) => {
     const piece = new Piece({
         userId: userId,
         type: request.body.type,
-        title: request.body.title,
-        year: request.body.year,
-        genre: request.body.genre,
-        imageUrl: request.body.imageUrl,
-        summary: request.body.summary,
-        completionDate: request.body.completionDate,
-        author: request.body.author,
-        director: request.body.director,
-        actors: request.body.actors,
-        console: request.body.console,
-        season: request.body.season,
-        volume: request.body.volume,
+        title: request.body.title || null,
+        year: request.body.year || null,
+        genre: request.body.genre || null,
+        imageUrl: request.body.imageUrl || null,
+        summary: request.body.summary || null,
+        completionDate: request.body.completionDate || null,
+        author: request.body.author || null,
+        director: request.body.director || null,
+        actors: request.body.actors || null,
+        console: request.body.console || null,
+        season: request.body.season || null,
+        volume: request.body.volume || null,
     });
 
     // save in MongoDB in the "pieces" collection (lower-case plurial name of the model)

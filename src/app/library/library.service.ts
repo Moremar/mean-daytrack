@@ -153,6 +153,11 @@ export class LibraryService {
     this.updateFilteredPieces();
   }
 
+  updateWishlistFilter(wishlist: boolean): void {
+    this._pieceFilter.setWishlistFilter(wishlist);
+    this.updateFilteredPieces();
+  }
+
   updateFilteredPieces(): void {
     const filtered: Piece[] = this._allPieces.filter( x => this._pieceFilter.accept(x) );
     this._filteredPiecesSubject.next(filtered);

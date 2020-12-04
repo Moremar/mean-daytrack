@@ -7,6 +7,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -52,6 +53,7 @@ import { ImportPiecesComponent } from './library/import-pieces/import-pieces.com
     MatProgressSpinnerModule,
     MatInputModule,
     MatSelectModule,
+    MatCheckboxModule,
     MatDatepickerModule,
     MatMomentDateModule,
     MatExpansionModule,

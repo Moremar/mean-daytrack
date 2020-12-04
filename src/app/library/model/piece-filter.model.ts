@@ -7,6 +7,7 @@ import { Piece } from './piece.model';
 export class PieceFilter {
     private _textFilter: string = null;
     private _pieceTypeFilter: PieceType = null;
+    private _wishlistFilter = false;
 
     constructor() {}
 
@@ -22,9 +23,18 @@ export class PieceFilter {
       this._pieceTypeFilter = pieceType;
     }
 
+    setWishlistFilter(wishlist: boolean): void {
+      this._wishlistFilter = wishlist;
+    }
+
     accept(piece: Piece): boolean {
         // filter on the piece type
         if (this._pieceTypeFilter !== null && piece.type !== this._pieceTypeFilter) {
+          return false;
+        }
+
+        // when wishlist is specified, show only the wishlist
+        if (this._wishlistFilter && piece.completionDate) {
           return false;
         }
 

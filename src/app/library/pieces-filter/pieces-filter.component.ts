@@ -17,6 +17,7 @@ export class PiecesFilterComponent implements OnInit {
   movieSelected = false;
   seriesSelected = false;
   gameSelected = false;
+  wishlistSelected = false;
 
   constructor(private libraryService: LibraryService) { }
 
@@ -75,6 +76,11 @@ export class PiecesFilterComponent implements OnInit {
       this.setTypeFilterBoolean(pieceType);
     }
     this.libraryService.updateTypeFilter(this.getSelectedType());
+  }
+
+  onWishlistClick(): void {
+    this.wishlistSelected = !this.wishlistSelected;
+    this.libraryService.updateWishlistFilter(this.wishlistSelected);
   }
 
   onTypeClick(pieceTypeStr: string): void {

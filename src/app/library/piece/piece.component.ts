@@ -51,9 +51,13 @@ export class PieceComponent implements OnInit {
 
   getCompletionDate(): string {
     const date = this.piece.completionDate;
-    return `${date.getDate()}`.padStart(2, '0') + '/'
-         + `${date.getMonth() + 1}`.padStart(2, '0') + '/'
-         + `${date.getFullYear()}`;
+    if (date) {
+      return `${date.getDate()}`.padStart(2, '0') + '/'
+           + `${date.getMonth() + 1}`.padStart(2, '0') + '/'
+           + `${date.getFullYear()}`;
+    } else {
+      return '';
+    }
   }
 
 
